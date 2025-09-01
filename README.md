@@ -1,34 +1,34 @@
-# VMind v2
+# V-Mind
 
-**VMind v2** is a next-generation knowledge management and productivity platform, designed for interstellar teams and organizations seeking to organize, visualize, and collaborate on information across the galaxy. Built with scalability, modularity, and user experience in mind, VMind v2 empowers users to map their ideas, tasks, and resources as if navigating a star system.
+**V-Mind** is a next-generation knowledge management and productivity platform, designed for interstellar teams and organizations seeking to organize, visualize, and collaborate on information across the galaxy. Built with scalability, modularity, and user experience in mind, V-Mind empowers users to map their ideas, tasks, and resources as if navigating a star system.
 
 ---
 
 ## 🚀 Galactic Overview
 
-- **Project Name:** VMind v2
-- **Purpose:** Knowledge management, mind mapping, and productivity tool
-- **Theme:** Galactic/space-inspired UI and terminology
-- **Tech Stack:** (Update with actual stack if needed)
-  - Frontend: React.js, TypeScript
-  - Backend: Node.js, Express
-  - Database: MongoDB
-  - Styling: Tailwind CSS / CSS Modules
-  - State Management: Redux / Context API
-  - Authentication: JWT / OAuth (if applicable)
-- **Status:** In active development
+- **Project Name:** V-Mind  
+- **Purpose:** Knowledge management, mind mapping, and productivity tool  
+- **Theme:** Galactic/space-inspired UI and terminology  
+- **Tech Stack:**  
+  - Frontend: HTML, CSS, JavaScript (Vanilla)  
+  - Bundler/Dev Server: Vite  
+  - Backend: Node.js + Express  
+  - Database: MySQL  
+  - Styling: Custom CSS  
+  - Authentication: JWT (or similar, if applicable)  
+- **Status:** In active development  
 
 ---
 
 ## 🌌 Features
 
-- **Mind Mapping:** Create, edit, and visualize interconnected ideas as constellations.
-- **Task Management:** Assign, track, and complete tasks (missions) within your knowledge galaxy.
-- **Collaboration:** Real-time collaboration for teams across the universe.
-- **Search & Filter:** Quickly locate stars (notes, tasks, resources) in your knowledge system.
-- **Customizable Views:** Switch between different galaxy map layouts and perspectives.
-- **User Authentication:** Secure access for crew members (users).
-- **Responsive Design:** Optimized for all devices, from planetary stations to mobile shuttles.
+- **Mind Mapping:** Create, edit, and visualize interconnected ideas as constellations.  
+- **Task Management:** Assign, track, and complete tasks (missions) within your knowledge galaxy.  
+- **Collaboration:** Real-time collaboration for teams across the universe.  
+- **Search & Filter:** Quickly locate stars (notes, tasks, resources) in your knowledge system.  
+- **Customizable Views:** Switch between different galaxy map layouts and perspectives.  
+- **User Authentication:** Secure access for crew members (users).  
+- **Responsive Design:** Optimized for all devices, from planetary stations to mobile shuttles.  
 
 ---
 
@@ -36,19 +36,18 @@
 
 ### Prerequisites
 
-- **Node.js** (version 16.x or higher recommended)
-- **npm** (comes with Node.js)
-- **MongoDB** (local or cloud instance)
-- (Optional) **Git** for version control
+- **Node.js** (version 16.x or higher recommended)  
+- **npm** (comes with Node.js)  
+- **MySQL** (local or remote instance)  
+- (Optional) **Git** for version control  
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/vmind_v2.git
-   cd vmind_v2-main
+   git clone https://github.com/AlejaQuiroga545/V-Mind.git
+   cd V-Mind
    ```
-
-2. **Install Dependencies**
-   ```bash
+1. **Install dependencies**
+ ```bash
    npm install
    ```
 
@@ -57,13 +56,13 @@
    - Example:
      ```
      # .env
-     MONGODB_URI=mongodb://localhost:27017/vmind
-     JWT_SECRET=your_super_secret_key
-     PORT=3000
+      DB_HOST=localhost
+      DB_USER=root
+      DB_PASSWORD=your_password
+      DB_NAME=vmind
+      JWT_SECRET=your_super_secret_key
+      PORT=3000
      ```
-
-4. **Run Database**
-   - Make sure MongoDB is running locally or update `MONGODB_URI` for a remote database.
 
 5. **Run the Development Server**
    ```bash
@@ -142,7 +141,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 For questions, suggestions, or to join our crew, contact:
 
 - **Project Lead:** Alejandra Quiroga - Scrum Master
-- **Email:** alejaquiroga@galaxy.com
+- **Email:** alejandraquirogag802@gmail.com
 - **Issues:** [GitHub Issues](https://github.com/yourusername/vmind_v2/issues)
 
 ---
