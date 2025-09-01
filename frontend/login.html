@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Vmind</title>
+    
+    <!-- Estilos modulares -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/space-background.css">
+    <link rel="stylesheet" href="css/login.css">
+    
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Fondo espacial con Canvas -->
+    <div class="stars-bg">
+        <canvas id="space"></canvas>
+    </div>
+
+
+
+    <!-- Navbar simplificado -->
+    <nav class="login-navbar">
+        <div class="login-nav-container">
+            <a href="index.html" class="login-nav-logo">Vmind</a>
+            <a href="index.html" class="back-link">
+                <span>←</span>
+                <span>Volver al inicio</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Contenedor principal del login -->
+    <div class="login-container">
+        <div class="login-card glass-effect">
+            <!-- Header del login -->
+            <div class="login-header">
+                <h1 class="login-logo">Vmind</h1>
+                <p class="login-subtitle">Inicia tu viaje de aprendizaje</p>
+            </div>
+
+            <!-- Formulario de login -->
+            <form class="login-form" id="loginForm">
+                <!-- Campo de usuario/email -->
+                <div class="form-group" id="usernameGroup">
+                    <label for="username" class="form-label">Usuario o Email</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        class="login-input"
+                        placeholder="Ingresa tu usuario o email"
+                        required
+                        autocomplete="username"
+                    >
+                    <span class="error-message" id="usernameError">Este campo es requerido</span>
+                </div>
+
+                <!-- Campo de contraseña -->
+                <div class="form-group" id="passwordGroup">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="login-input"
+                        placeholder="Ingresa tu contraseña"
+                        required
+                        autocomplete="current-password"
+                    >
+                    <span class="error-message" id="passwordError">Este campo es requerido</span>
+                </div>
+
+                <!-- Botón de login -->
+                <button type="submit" class="login-button glow-effect" id="loginButton">
+                    <span class="button-text">Iniciar Sesión</span>
+                </button>
+            </form>
+
+            <!-- Footer con enlaces adicionales -->
+            <div class="login-footer">
+                <div class="login-divider">
+                    <span>o</span>
+                </div>
+                <p>
+                    ¿No tienes una cuenta? 
+                    <a href="register.html" class="login-link" id="registerLink">Regístrate aquí</a>
+                </p>
+                <p>
+                    <a href="#" class="login-link" id="forgotPasswordLink">¿Olvidaste tu contraseña?</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts modulares -->
+    <script src="js/login-space-warp.js"></script>
+    <script src="js/api-config.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>

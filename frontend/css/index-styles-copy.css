@@ -1,0 +1,234 @@
+/* ===== COPIA EXACTA DE ESTILOS DEL INDEX.HTML ===== */
+/* Este archivo copia exactamente los estilos del index para aplicar a otras páginas */
+
+/* Variables copiadas del styles.css original */
+:root {
+    /* Colores principales Galaxy-themed */
+    --primary: #5D3FD3; /* Azul marino oscuro */
+    --primary-dark: #4A32A8;
+    --primary-light: #7B5FE8;
+    --secondary: #3AB0FF; /* Azul vibrante */
+    --accent: #641ACF; /* Azul-morado */
+    --accent-pink: #FF6EC7; /* Rosa intenso */
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    
+    /* Colores de fondo espacial */
+    --bg-dark: #0A0A0F;
+    --bg-space: #0F0F1A;
+    --bg-nebula: #1A0B2E;
+    --bg-card: rgba(255, 255, 255, 0.08);
+    --bg-card-hover: rgba(255, 255, 255, 0.12);
+    
+    /* Colores de texto */
+    --text-primary: #ffffff;
+    --text-secondary: #E2E8F0;
+    --text-muted: #94A3B8;
+    
+    /* Gradientes Galaxy-themed */
+    --gradient-primary: linear-gradient(135deg, #5D3FD3 0%, #641ACF 50%, #FF6EC7 100%);
+    --gradient-secondary: linear-gradient(135deg, #3AB0FF 0%, #5D3FD3 50%, #641ACF 100%);
+    --gradient-hero: linear-gradient(135deg, #0A0A0F 0%, #1A0B2E 50%, #0A0A0F 100%);
+    --gradient-nebula: linear-gradient(135deg, #1A0B2E 0%, #2D1B69 50%, #1A0B2E 100%);
+    --gradient-space: linear-gradient(135deg, #0F0F1A 0%, #1A0B2E 100%);
+    
+    /* Sombras suaves */
+    --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.15);
+    --shadow-glow: 0 0 25px rgba(93, 63, 211, 0.4);
+    --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --shadow-neon: 0 0 20px rgba(255, 110, 199, 0.3);
+    
+    /* Bordes redondeados */
+    --border-radius: 16px;
+    --border-radius-lg: 24px;
+    --border-radius-xl: 36px;
+    
+    /* Transiciones */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* Cursor personalizado copiado del index */
+body {
+    cursor: url('../assets/Neon Gradient Arrow & Rocket/Neon Gradient Arrow & Rocket--cursor--SweezyCursors.cur') 1 1, auto;
+}
+
+a, button, .clickable, .path-node, .badge {
+    cursor: url('../assets/Neon Gradient Arrow & Rocket/Neon Gradient Arrow & Rocket--pointer--SweezyCursors.cur') 1 1, pointer;
+}
+
+/* Botones CTA copiados exactamente del index */
+.index-cta-button {
+    position: relative;
+    padding: 1.2rem 3rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--border-radius-xl);
+    cursor: url('../assets/Neon Gradient Arrow & Rocket/Neon Gradient Arrow & Rocket--pointer--SweezyCursors.cur') 1 1, pointer;
+    transition: var(--transition-normal);
+    overflow: hidden;
+    background: linear-gradient(135deg, #5D3FD3 0%, #641ACF 50%, #FF6EC7 100%);
+    color: var(--text-primary);
+    box-shadow: 
+        0 0 30px rgba(93, 63, 211, 0.4),
+        0 8px 25px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.index-cta-button:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 
+        0 0 50px rgba(93, 63, 211, 0.6),
+        0 12px 40px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(135deg, #4A32A8 0%, #5D3FD3 50%, #E55BB8 100%);
+}
+
+.index-cta-button.final {
+    background: linear-gradient(135deg, #3AB0FF 0%, #5D3FD3 50%, #641ACF 100%);
+    font-size: 1.4rem;
+    padding: 1.4rem 3.5rem;
+    box-shadow: 
+        0 0 40px rgba(58, 176, 255, 0.5),
+        0 10px 35px rgba(0, 0, 0, 0.3);
+}
+
+.index-cta-button.final:hover {
+    background: linear-gradient(135deg, #2B9BE8 0%, #4A32A8 50%, #5D3FD3 100%);
+    box-shadow: 
+        0 0 60px rgba(58, 176, 255, 0.7),
+        0 15px 45px rgba(0, 0, 0, 0.4);
+}
+
+.index-button-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: var(--transition-slow);
+}
+
+.index-cta-button:hover .index-button-glow {
+    left: 100%;
+}
+
+/* Botones de navegación copiados del index */
+.index-nav-button {
+    padding: 0.6rem 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    color: var(--text-primary);
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    cursor: url('../assets/Neon Gradient Arrow & Rocket/Neon Gradient Arrow & Rocket--pointer--SweezyCursors.cur') 1 1, pointer;
+    transition: var(--transition-normal);
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.index-nav-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.index-nav-button.primary {
+    background: var(--gradient-primary);
+    border-color: transparent;
+    box-shadow: var(--shadow-glow);
+}
+
+.index-nav-button.primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
+}
+
+/* Animaciones copiadas del index */
+@keyframes planet-float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes scan-animation {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+/* Clases de animación del index */
+.index-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+.index-planet-float {
+    animation: planet-float 6s ease-in-out infinite;
+}
+
+.index-scan-effect {
+    animation: scan-animation 2s ease-in-out infinite;
+}
+
+/* Elementos UI del index */
+.index-ui-element {
+    position: relative;
+    display: inline-block;
+}
+
+.index-ui-element.rocket {
+    animation: float 8s ease-in-out infinite;
+    animation-delay: 1s;
+}
+
+.index-ui-element.planet {
+    animation: planet-float 12s ease-in-out infinite;
+}
+
+.index-ui-element.planet:nth-child(2) {
+    animation-delay: 2s;
+}
+
+.index-ui-element.planet:nth-child(3) {
+    animation-delay: 4s;
+}
+
+.index-ui-element.planet:nth-child(4) {
+    animation-delay: 6s;
+}
+
+.index-ui-element.planet:nth-child(5) {
+    animation-delay: 8s;
+}
+
+/* Responsive copiado del index */
+@media (max-width: 768px) {
+    .index-cta-button {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+    }
+    
+    .index-cta-button.final {
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
+    }
+    
+    .index-nav-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+}
+

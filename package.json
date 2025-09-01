@@ -1,0 +1,27 @@
+{
+  "name": "vmind_v2",
+  "version": "1.0.0",
+  "description": "Vmind - AI-powered learning platform with gamified roadmaps",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .js,.html",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0"
+  },
+  "keywords": [
+    "learning",
+    "ai",
+    "education",
+    "roadmap",
+    "gamification"
+  ],
+  "author": "Vmind Team",
+  "license": "MIT"
+}

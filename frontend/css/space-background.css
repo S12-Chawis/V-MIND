@@ -1,0 +1,134 @@
+/* ===== FONDO ESPACIAL Y EFECTOS ===== */
+
+/* Fondo espacial con Canvas */
+.stars-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background: var(--gradient-hero);
+}
+
+.stars-bg canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Efectos de partículas y nebulosas */
+.nebula-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(93, 63, 211, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(58, 176, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(255, 110, 199, 0.1) 0%, transparent 50%);
+}
+
+/* Overlay para mejorar legibilidad */
+.content-overlay {
+    position: relative;
+    z-index: 1;
+}
+
+.content-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 10, 15, 0.3);
+    z-index: -1;
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+}
+
+/* Efectos de glow para elementos */
+.glow-effect {
+    position: relative;
+}
+
+.glow-effect::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: var(--gradient-primary);
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.glow-effect:hover::before {
+    opacity: 0.3;
+}
+
+/* Cursor personalizado */
+body {
+    cursor: url('../assets/Neon Gradient Arrow & Rocket/Neon Gradient Arrow & Rocket--cursor--SweezyCursors.cur'), auto;
+}
+
+a, button, .clickable {
+    cursor: url('../assets/Neon Gradient Arrow & Rocket/Neon Gradient Arrow & Rocket--pointer--SweezyCursors.cur'), pointer;
+}
+
+/* Efectos de parallax */
+.parallax-element {
+    transform-style: preserve-3d;
+    transition: transform 0.1s ease-out;
+}
+
+/* Animaciones de fondo */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.floating {
+    animation: float 6s ease-in-out infinite;
+}
+
+.rotating {
+    animation: rotate 20s linear infinite;
+}
+
+/* Efectos de cristal/glassmorphism */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-card);
+}
+
+.glass-effect-strong {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: var(--shadow-card);
+}

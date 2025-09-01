@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Vmind</title>
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/space-background.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <!-- Chart.js para gráficas -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Quill.js para el editor de notas -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Fondo espacial -->
+    <div class="stars-bg">
+        <canvas id="space"></canvas>
+    </div>
+
+    <!-- Indicadores de Scroll -->
+    <div class="scroll-indicators">
+        <div class="scroll-dot active" data-section="0"></div>
+        <div class="scroll-dot" data-section="1"></div>
+        <div class="scroll-dot" data-section="2"></div>
+        <div class="scroll-dot" data-section="3"></div>
+    </div>
+
+    <!-- Sidebar lateral -->
+    <aside class="dashboard-sidebar" id="dashboardSidebar">
+        <div class="sidebar-content">
+            <!-- Tarjeta 1: Avatar y Nombre (siempre visible) -->
+            <div class="profile-card-top" id="profileCardTop">
+                <div class="profile-card-header" id="profileCardHeader">
+                    <div class="profile-avatar-mini">
+                        <img src="assets/ui_elements/avatar.png" alt="Avatar" id="sidebarAvatar">
+                        <div class="avatar-glow"></div>
+                    </div>
+                    <div class="profile-info-mini">
+                        <h3 class="profile-name-mini" id="sidebarUserName">John Doe</h3>
+                        <div class="profile-level-mini">
+                            <span class="level-planet">🪐</span>
+                            <span class="level-text">Explorador</span>
+                        </div>
+                    </div>
+                    <div class="expand-icon" id="expandIcon">▼</div>
+                </div>
+            </div>
+            
+            <!-- Tarjeta 2: XP y Racha (se despliega) -->
+            <div class="profile-card-bottom" id="profileCardBottom">
+                <div class="card-content">
+                    <!-- XP -->
+                    <div class="xp-section">
+                        <div class="xp-header">
+                            <span class="xp-icon">⭐</span>
+                            <span class="xp-title">Experiencia</span>
+                        </div>
+                        <div class="xp-progress-mini">
+                            <div class="xp-bar-mini">
+                                <div class="xp-fill-mini" id="sidebarXPFill" style="width: 62.5%"></div>
+                            </div>
+                            <div class="xp-text-mini">
+                                <span id="sidebarXP">1,250</span> / <span id="sidebarXPNext">2,000</span> XP
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Racha -->
+                    <div class="streak-section">
+                        <div class="streak-header-mini">
+                            <span class="streak-icon">🔥</span>
+                            <span class="streak-title">Racha de la semana</span>
+                        </div>
+                        <div class="streak-days-mini" id="sidebarStreakDays">
+                            <div class="streak-day-mini active">L</div>
+                            <div class="streak-day-mini active">M</div>
+                            <div class="streak-day-mini active">X</div>
+                            <div class="streak-day-mini">J</div>
+                            <div class="streak-day-mini">V</div>
+                            <div class="streak-day-mini">S</div>
+                            <div class="streak-day-mini">D</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navegación por scroll -->
+            <nav class="scroll-nav">
+                <div class="nav-item active" data-section="home">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-text">Home</span>
+                </div>
+                <div class="nav-item" data-section="roadmap">
+                    <span class="nav-icon">🗺️</span>
+                    <span class="nav-text">Roadmap</span>
+                </div>
+                <div class="nav-item" data-section="notas">
+                    <span class="nav-icon">📝</span>
+                    <span class="nav-text">Notas</span>
+                </div>
+                <div class="nav-item" data-section="recursos">
+                    <span class="nav-icon">📚</span>
+                    <span class="nav-text">Recursos</span>
+                </div>
+            </nav>
+            
+            <!-- Cerrar sesión -->
+            <div class="sidebar-footer">
+                <button class="logout-btn" id="sidebarLogoutBtn">
+                    <span class="logout-icon">🚪</span>
+                    <span>Cerrar sesión</span>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Contenido principal con scroll -->
+    <main class="dashboard-main">
+        <!-- Sección Home -->
+        <section id="home" class="scroll-section active">
+            <div class="home-container">
+                <!-- Saludo con cita inspiradora -->
+                <div class="welcome-section">
+                    <h1 class="welcome-title">Hola, <span id="userName">Explorador</span> 👋</h1>
+                    <div class="inspirational-quote">
+                        <p class="quote-text" id="quoteText">"El aprendizaje es un tesoro que seguirá a su dueño a todas partes."</p>
+                        <p class="quote-author" id="quoteAuthor">- Proverbio chino</p>
+                    </div>
+                </div>
+
+                <!-- Widgets tipo iOS con diferentes tamaños -->
+                <div class="widgets-grid">
+                    <!-- Widget de Progreso (2x1) -->
+                    <div class="widget progress-widget widget-large">
+                        <div class="widget-header">
+                            <h3>Mi Progreso</h3>
+                            <span class="widget-icon">📊</span>
+                        </div>
+                        <div class="widget-content">
+                            <canvas id="progressChart" width="300" height="200"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Widget de Racha (1x1) -->
+                    <div class="widget streak-widget widget-small">
+                        <div class="widget-header">
+                            <h3>Racha de Aprendizaje</h3>
+                            <span class="widget-icon">🔥</span>
+                        </div>
+                        <div class="widget-content">
+                            <canvas id="streakChart" width="200" height="150"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Widget de Notas Rápidas (1x1) -->
+                    <div class="widget notes-widget widget-small">
+                        <div class="widget-header">
+                            <h3>Notas Rápidas</h3>
+                            <span class="widget-icon">📝</span>
+                        </div>
+                        <div class="widget-content">
+                            <div class="quick-notes" id="quickNotes">
+                                <div class="note-preview">
+                                    <h4>Conceptos de Python</h4>
+                                    <p>Variables, funciones, clases...</p>
+                                </div>
+                                <button class="new-note-btn" id="newQuickNote">+ Nueva Nota</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Widget de Próximos Pasos (ancho completo) -->
+                    <div class="widget next-steps-widget widget-full">
+                        <div class="widget-header">
+                            <h3>Próximos Pasos</h3>
+                            <span class="widget-icon">🎯</span>
+                        </div>
+                        <div class="widget-content">
+                            <div class="next-steps-list" id="nextStepsList">
+                                <div class="step-item">
+                                    <span class="step-icon">📚</span>
+                                    <span class="step-text">Completar Fundamentos de Python</span>
+                                </div>
+                                <div class="step-item">
+                                    <span class="step-icon">🎥</span>
+                                    <span class="step-text">Ver video sobre POO</span>
+                                </div>
+                                <div class="step-item">
+                                    <span class="step-icon">💻</span>
+                                    <span class="step-text">Practicar con ejercicios</span>
+                                </div>
+                                <div class="step-item">
+                                    <span class="step-icon">📖</span>
+                                    <span class="step-text">Leer documentación oficial</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Roadmap -->
+        <section id="roadmap" class="scroll-section">
+            <div class="roadmap-container">
+                <h2 class="section-title">Tu Viaje de Aprendizaje Python</h2>
+                <div class="roadmap-content">
+                    <!-- Slider horizontal de planetas -->
+                    <div class="roadmap-slider">
+                        <div class="slider-container">
+                            <div class="slider-track" id="sliderTrack">
+                                <!-- Los planetas se generarán dinámicamente -->
+                            </div>
+                            
+                            <!-- Controles del slider -->
+                            <button class="slider-control prev" id="prevPlanet">
+                                <span>‹</span>
+                            </button>
+                            <button class="slider-control next" id="nextPlanet">
+                                <span>›</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Indicadores de progreso -->
+                        <div class="progress-indicators">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="roadmapProgress" style="width: 10%"></div>
+                            </div>
+                            <span class="progress-text" id="progressText">1 de 10 planetas completados</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Notas -->
+        <section id="notas" class="scroll-section">
+            <div class="notes-container">
+                <div class="notes-header">
+                    <h2 class="section-title">Mis Notas</h2>
+                    <button class="new-note-btn-large" id="newNoteBtn">
+                        <span class="btn-icon">+</span>
+                        <span class="btn-text">Nueva Nota</span>
+                    </button>
+                </div>
+                
+                <div class="notes-grid" id="notesGrid">
+                    <!-- Las notas se generarán dinámicamente -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Recursos -->
+        <section id="recursos" class="scroll-section">
+            <div class="resources-container">
+                <h2 class="section-title">Recursos por Planeta</h2>
+                <div class="resources-grid" id="resourcesGrid">
+                    <!-- Los recursos se generarán dinámicamente -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal para crear/editar notas -->
+    <div class="note-modal" id="noteModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Nueva Nota</h3>
+                <button class="modal-close" id="closeNoteModal">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="noteTitle" placeholder="Título de la nota" class="note-title-input">
+                <div id="noteEditor"></div>
+                <div class="note-tags">
+                    <input type="text" id="noteTags" placeholder="Etiquetas (separadas por comas)" class="tags-input">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelNote">Cancelar</button>
+                <button class="btn-primary" id="saveNote">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para recursos/videos -->
+    <div class="resource-modal" id="resourceModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="resourceTitle">Recurso</h3>
+                <button class="modal-close" id="closeResourceModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="video-container">
+                    <iframe id="videoFrame" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="resource-notes">
+                    <h4>Notas del Video</h4>
+                    <div id="resourceNoteEditor"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para planetas del roadmap -->
+    <div class="planet-modal" id="planetModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="planetTitle">Planeta</h3>
+                <button class="modal-close" id="closePlanetModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="planet-details">
+                    <div class="planet-header">
+                        <div class="planet-image-large">
+                            <img id="planetModalImage" src="" alt="Planeta">
+                        </div>
+                        <div class="planet-info-large">
+                            <h2 id="planetModalName">Nombre del Planeta</h2>
+                            <p id="planetModalDescription">Descripción del planeta</p>
+                            <div class="planet-status-large" id="planetModalStatus">Estado</div>
+                        </div>
+                    </div>
+                    
+                    <div class="planet-content">
+                        <div class="tasks-section">
+                            <h3>Tareas de Aprendizaje</h3>
+                            <div class="tasks-progress">
+                                <div class="progress-info">
+                                    <span class="completed-tasks" id="completedTasks">0</span> / <span class="total-tasks" id="totalTasks">0</span> tareas completadas
+                                </div>
+                                <div class="xp-earned">
+                                    <span class="xp-icon">⭐</span>
+                                    <span class="xp-amount" id="xpEarned">0 XP</span> ganados
+                                </div>
+                            </div>
+                            <div class="tasks-list" id="planetModalTasks">
+                                <!-- Tareas se generarán dinámicamente -->
+                            </div>
+                            
+                            <!-- Easter Egg Warning -->
+                            <div class="easter-egg-warning" id="easterEggWarning" style="display: none;">
+                                <div class="warning-content">
+                                    <img src="assets/ui_elements/cerebrito.png" alt="Cerebrito" class="warning-icon">
+                                    <div class="warning-text">
+                                        <h4>¡Despacio, cerebrito! 🧠</h4>
+                                        <p>Solo puedes marcar una tarea a la vez. ¡Tómate tu tiempo para aprender!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="resources-section">
+                            <h3>Recursos Disponibles</h3>
+                            <div id="planetModalResources">
+                                <!-- Recursos se generarán dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="closePlanetBtn">Cerrar</button>
+                <button class="btn-primary" id="startPlanetBtn">Comenzar Aprendizaje</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/test-users.js"></script>
+    <script src="js/space-background.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
