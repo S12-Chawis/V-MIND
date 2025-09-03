@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Characterization Survey - V-Mind</title>
+    <link rel="stylesheet" href="css/survey.css">
+</head>
+<body>
+    <!-- Space background with Canvas -->
+    <div class="stars-bg">
+        <canvas id="space"></canvas>
+    </div>
+    
+    <!-- Nebula effects -->
+    <div class="nebula-effect"></div>
+    
+    <!-- Overlay to improve readability -->
+    <div class="content-overlay">
+        <div class="survey-container">
+            <div class="survey-header">
+                <h1>🎯 Personalize Your Experience</h1>
+                <p>Help us create the perfect roadmap for you</p>
+            </div>
+
+            <form class="survey-form" id="characterizationForm">
+                <div class="question-group">
+                    <h3>What is your level of programming experience?</h3>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="experience" value="beginner" required>
+                            <div class="option-text">
+                                <strong>Beginner</strong>
+                                <small>I'm starting to learn programming, with basic or no knowledge</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="experience" value="intermediate" required>
+                            <div class="option-text">
+                                <strong>Intermediate</strong>
+                                <small>I have basic experience and understand fundamental concepts</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="experience" value="advanced" required>
+                            <div class="option-text">
+                                <strong>Advanced</strong>
+                                <small>I have solid experience and want to specialize</small>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <h3>What type of learning do you prefer?</h3>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="learningStyle" value="practical" required>
+                            <div class="option-text">
+                                <strong>Practical</strong>
+                                <small>I prefer learning by doing projects and exercises</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="learningStyle" value="theoretical" required>
+                            <div class="option-text">
+                                <strong>Theoretical</strong>
+                                <small>I prefer understanding concepts before practicing</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="learningStyle" value="balanced" required>
+                            <div class="option-text">
+                                <strong>Balanced</strong>
+                                <small>I like combining theory and practice</small>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <h3>How much time can you dedicate daily?</h3>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="timeCommitment" value="minimal" required>
+                            <div class="option-text">
+                                <strong>Minimal (15-30 min)</strong>
+                                <small>I can dedicate little time but consistently</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="timeCommitment" value="moderate" required>
+                            <div class="option-text">
+                                <strong>Moderate (1-2 hours)</strong>
+                                <small>I have time to study regularly</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="timeCommitment" value="intensive" required>
+                            <div class="option-text">
+                                <strong>Intensive (3+ hours)</strong>
+                                <small>I can dedicate a lot of time to learning</small>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <h3>What technologies interest you most? (Select the ones you prefer)</h3>
+                    <div class="options">
+                        <label class="option">
+                            <input type="checkbox" name="technologies" value="python">
+                            <div class="option-text">
+                                <strong>Python</strong>
+                                <small>Versatile language for web, data science, AI and automation</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="checkbox" name="technologies" value="javascript">
+                            <div class="option-text">
+                                <strong>JavaScript</strong>
+                                <small>Main language for frontend and backend web development</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="checkbox" name="technologies" value="java">
+                            <div class="option-text">
+                                <strong>Java</strong>
+                                <small>Robust language for enterprise applications and Android</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="checkbox" name="technologies" value="csharp">
+                            <div class="option-text">
+                                <strong>C#</strong>
+                                <small>Microsoft language for Windows application development</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="checkbox" name="technologies" value="php">
+                            <div class="option-text">
+                                <strong>PHP</strong>
+                                <small>Language for backend web development and CMS</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="checkbox" name="technologies" value="react">
+                            <div class="option-text">
+                                <strong>React</strong>
+                                <small>JavaScript library for user interfaces</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="checkbox" name="technologies" value="nodejs">
+                            <div class="option-text">
+                                <strong>Node.js</strong>
+                                <small>JavaScript runtime for backend development</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="checkbox" name="technologies" value="sql">
+                            <div class="option-text">
+                                <strong>SQL</strong>
+                                <small>Language for database management and querying</small>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <h3>What development area interests you most?</h3>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="developmentArea" value="web" required>
+                            <div class="option-text">
+                                <strong>Web Development</strong>
+                                <small>Websites, web applications, frontend and backend</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="developmentArea" value="mobile" required>
+                            <div class="option-text">
+                                <strong>Mobile Development</strong>
+                                <small>Apps for Android, iOS and hybrid applications</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="developmentArea" value="data" required>
+                            <div class="option-text">
+                                <strong>Data Science & AI</strong>
+                                <small>Data analysis, machine learning and artificial intelligence</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="developmentArea" value="desktop" required>
+                            <div class="option-text">
+                                <strong>Desktop Applications</strong>
+                                <small>Software for Windows, macOS and Linux</small>
+                            </div>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="developmentArea" value="game" required>
+                            <div class="option-text">
+                                <strong>Game Development</strong>
+                                <small>2D, 3D video games and interactive applications</small>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">
+                        <span class="btn-text">Create My Personalized Roadmap</span>
+                        <div class="loading-spinner" style="display: none;"></div>
+                    </button>
+                    <button type="button" class="btn-cancel" onclick="cancelSurvey()">
+                        <span class="btn-text">Cancel</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="success-message" style="display: none;">
+                <div class="success-icon">🎉</div>
+                <h2>Perfect!</h2>
+                <p>Your personalized roadmap has been created. You will be redirected to the dashboard in a few seconds...</p>
+                <div class="loading-spinner"></div>
+                <p class="redirect-text">Preparing your personalized experience...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/survey.js"></script>
+    <script src="js/space-background.js"></script>
+</body>
+</html>

@@ -50,7 +50,7 @@
                         <h3 class="profile-name-mini" id="sidebarUserName">John Doe</h3>
                         <div class="profile-level-mini">
                             <span class="level-planet">🪐</span>
-                            <span class="level-text">Explorador</span>
+                            <span class="level-text">Explorer</span>
                         </div>
                     </div>
                     <div class="expand-icon" id="expandIcon">▼</div>
@@ -64,7 +64,7 @@
                     <div class="xp-section">
                         <div class="xp-header">
                             <span class="xp-icon">⭐</span>
-                            <span class="xp-title">Experiencia</span>
+                            <span class="xp-title">Experience</span>
                         </div>
                         <div class="xp-progress-mini">
                             <div class="xp-bar-mini">
@@ -76,20 +76,20 @@
                         </div>
                     </div>
                     
-                    <!-- Racha -->
+                    <!-- Streak -->
                     <div class="streak-section">
                         <div class="streak-header-mini">
                             <span class="streak-icon">🔥</span>
-                            <span class="streak-title">Racha de la semana</span>
+                            <span class="streak-title">Weekly Streak</span>
                         </div>
                         <div class="streak-days-mini" id="sidebarStreakDays">
-                            <div class="streak-day-mini active">L</div>
                             <div class="streak-day-mini active">M</div>
-                            <div class="streak-day-mini active">X</div>
-                            <div class="streak-day-mini">J</div>
-                            <div class="streak-day-mini">V</div>
+                            <div class="streak-day-mini active">T</div>
+                            <div class="streak-day-mini active">W</div>
+                            <div class="streak-day-mini">T</div>
+                            <div class="streak-day-mini">F</div>
                             <div class="streak-day-mini">S</div>
-                            <div class="streak-day-mini">D</div>
+                            <div class="streak-day-mini">S</div>
                         </div>
                     </div>
                 </div>
@@ -107,19 +107,27 @@
                 </div>
                 <div class="nav-item" data-section="notas">
                     <span class="nav-icon">📝</span>
-                    <span class="nav-text">Notas</span>
+                    <span class="nav-text">Notes</span>
                 </div>
                 <div class="nav-item" data-section="recursos">
                     <span class="nav-icon">📚</span>
-                    <span class="nav-text">Recursos</span>
+                    <span class="nav-text">Resources</span>
                 </div>
             </nav>
             
-            <!-- Cerrar sesión -->
+            <!-- Cerrar sesión y eliminar cuenta -->
             <div class="sidebar-footer">
                 <button class="logout-btn" id="sidebarLogoutBtn">
                     <span class="logout-icon">🚪</span>
-                    <span>Cerrar sesión</span>
+                    <span>Logout</span>
+                </button>
+                <button class="retake-survey-btn" id="sidebarRetakeSurveyBtn">
+                    <span class="survey-icon">🎯</span>
+                    <span>Retake Survey</span>
+                </button>
+                <button class="delete-account-btn" id="sidebarDeleteAccountBtn">
+                    <span class="delete-icon">💥</span>
+                    <span>Delete Account</span>
                 </button>
             </div>
         </div>
@@ -132,19 +140,19 @@
             <div class="home-container">
                 <!-- Saludo con cita inspiradora -->
                 <div class="welcome-section">
-                    <h1 class="welcome-title">Hola, <span id="userName">Explorador</span> 👋</h1>
+                    <h1 class="welcome-title">Hello, <span id="userName">Explorer</span> 👋</h1>
                     <div class="inspirational-quote">
-                        <p class="quote-text" id="quoteText">"El aprendizaje es un tesoro que seguirá a su dueño a todas partes."</p>
-                        <p class="quote-author" id="quoteAuthor">- Proverbio chino</p>
+                        <p class="quote-text" id="quoteText">"Learning is a treasure that will follow its owner everywhere."</p>
+                        <p class="quote-author" id="quoteAuthor">- Chinese Proverb</p>
                     </div>
                 </div>
 
                 <!-- Widgets tipo iOS con diferentes tamaños -->
                 <div class="widgets-grid">
-                    <!-- Widget de Progreso (2x1) -->
+                    <!-- Progress Widget (2x1) -->
                     <div class="widget progress-widget widget-large">
                         <div class="widget-header">
-                            <h3>Mi Progreso</h3>
+                            <h3>My Progress</h3>
                             <span class="widget-icon">📊</span>
                         </div>
                         <div class="widget-content">
@@ -152,10 +160,10 @@
                         </div>
                     </div>
 
-                    <!-- Widget de Racha (1x1) -->
+                    <!-- Learning Streak Widget (1x1) -->
                     <div class="widget streak-widget widget-small">
                         <div class="widget-header">
-                            <h3>Racha de Aprendizaje</h3>
+                            <h3>Learning Streak</h3>
                             <span class="widget-icon">🔥</span>
                         </div>
                         <div class="widget-content">
@@ -163,46 +171,46 @@
                         </div>
                     </div>
 
-                    <!-- Widget de Notas Rápidas (1x1) -->
+                    <!-- Quick Notes Widget (1x1) -->
                     <div class="widget notes-widget widget-small">
                         <div class="widget-header">
-                            <h3>Notas Rápidas</h3>
+                            <h3>Quick Notes</h3>
                             <span class="widget-icon">📝</span>
                         </div>
                         <div class="widget-content">
                             <div class="quick-notes" id="quickNotes">
                                 <div class="note-preview">
-                                    <h4>Conceptos de Python</h4>
-                                    <p>Variables, funciones, clases...</p>
+                                    <h4>Python Concepts</h4>
+                                    <p>Variables, functions, classes...</p>
                                 </div>
-                                <button class="new-note-btn" id="newQuickNote">+ Nueva Nota</button>
+                                <button class="new-note-btn" id="newQuickNote">+ New Note</button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Widget de Próximos Pasos (ancho completo) -->
+                    <!-- Next Steps Widget (full width) -->
                     <div class="widget next-steps-widget widget-full">
                         <div class="widget-header">
-                            <h3>Próximos Pasos</h3>
+                            <h3>Next Steps</h3>
                             <span class="widget-icon">🎯</span>
                         </div>
                         <div class="widget-content">
                             <div class="next-steps-list" id="nextStepsList">
                                 <div class="step-item">
                                     <span class="step-icon">📚</span>
-                                    <span class="step-text">Completar Fundamentos de Python</span>
+                                    <span class="step-text">Complete Python Fundamentals</span>
                                 </div>
                                 <div class="step-item">
                                     <span class="step-icon">🎥</span>
-                                    <span class="step-text">Ver video sobre POO</span>
+                                    <span class="step-text">Watch OOP video</span>
                                 </div>
                                 <div class="step-item">
                                     <span class="step-icon">💻</span>
-                                    <span class="step-text">Practicar con ejercicios</span>
+                                    <span class="step-text">Practice with exercises</span>
                                 </div>
                                 <div class="step-item">
                                     <span class="step-icon">📖</span>
-                                    <span class="step-text">Leer documentación oficial</span>
+                                    <span class="step-text">Read official documentation</span>
                                 </div>
                             </div>
                         </div>
@@ -214,7 +222,7 @@
         <!-- Sección Roadmap -->
         <section id="roadmap" class="scroll-section">
             <div class="roadmap-container">
-                <h2 class="section-title">Tu Viaje de Aprendizaje Python</h2>
+                <h2 class="section-title">Your Python Learning Journey</h2>
                 <div class="roadmap-content">
                     <!-- Slider horizontal de planetas -->
                     <div class="roadmap-slider">
@@ -232,26 +240,26 @@
                             </button>
                         </div>
                         
-                        <!-- Indicadores de progreso -->
+                        <!-- Progress indicators -->
                         <div class="progress-indicators">
                             <div class="progress-bar">
                                 <div class="progress-fill" id="roadmapProgress" style="width: 10%"></div>
                             </div>
-                            <span class="progress-text" id="progressText">1 de 10 planetas completados</span>
+                            <span class="progress-text" id="progressText">1 of 10 planets completed</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Sección Notas -->
+        <!-- Notes Section -->
         <section id="notas" class="scroll-section">
             <div class="notes-container">
                 <div class="notes-header">
-                    <h2 class="section-title">Mis Notas</h2>
+                    <h2 class="section-title">My Notes</h2>
                     <button class="new-note-btn-large" id="newNoteBtn">
                         <span class="btn-icon">+</span>
-                        <span class="btn-text">Nueva Nota</span>
+                        <span class="btn-text">New Note</span>
                     </button>
                 </div>
                 
@@ -261,45 +269,45 @@
             </div>
         </section>
 
-        <!-- Sección Recursos -->
+        <!-- Resources Section -->
         <section id="recursos" class="scroll-section">
             <div class="resources-container">
-                <h2 class="section-title">Recursos por Planeta</h2>
+                <h2 class="section-title">Resources by Planet</h2>
                 <div class="resources-grid" id="resourcesGrid">
-                    <!-- Los recursos se generarán dinámicamente -->
+                    <!-- Resources will be generated dynamically -->
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Modal para crear/editar notas -->
+    <!-- Modal for creating/editing notes -->
     <div class="note-modal" id="noteModal">
         <div class="modal-backdrop"></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="modalTitle">Nueva Nota</h3>
+                <h3 id="modalTitle">New Note</h3>
                 <button class="modal-close" id="closeNoteModal">×</button>
             </div>
             <div class="modal-body">
-                <input type="text" id="noteTitle" placeholder="Título de la nota" class="note-title-input">
+                <input type="text" id="noteTitle" placeholder="Note title" class="note-title-input">
                 <div id="noteEditor"></div>
                 <div class="note-tags">
-                    <input type="text" id="noteTags" placeholder="Etiquetas (separadas por comas)" class="tags-input">
+                    <input type="text" id="noteTags" placeholder="Tags (separated by commas)" class="tags-input">
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-secondary" id="cancelNote">Cancelar</button>
-                <button class="btn-primary" id="saveNote">Guardar</button>
+                <button class="btn-secondary" id="cancelNote">Cancel</button>
+                <button class="btn-primary" id="saveNote">Save</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal para recursos/videos -->
+    <!-- Modal for resources/videos -->
     <div class="resource-modal" id="resourceModal">
         <div class="modal-backdrop"></div>
         <div class="modal-content large">
             <div class="modal-header">
-                <h3 id="resourceTitle">Recurso</h3>
+                <h3 id="resourceTitle">Resource</h3>
                 <button class="modal-close" id="closeResourceModal">×</button>
             </div>
             <div class="modal-body">
@@ -307,74 +315,74 @@
                     <iframe id="videoFrame" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
                 </div>
                 <div class="resource-notes">
-                    <h4>Notas del Video</h4>
+                    <h4>Video Notes</h4>
                     <div id="resourceNoteEditor"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal para planetas del roadmap -->
+    <!-- Modal for roadmap planets -->
     <div class="planet-modal" id="planetModal">
         <div class="modal-backdrop"></div>
         <div class="modal-content large">
             <div class="modal-header">
-                <h3 id="planetTitle">Planeta</h3>
+                <h3 id="planetTitle">Planet</h3>
                 <button class="modal-close" id="closePlanetModal">×</button>
             </div>
             <div class="modal-body">
                 <div class="planet-details">
                     <div class="planet-header">
                         <div class="planet-image-large">
-                            <img id="planetModalImage" src="" alt="Planeta">
+                            <img id="planetModalImage" src="" alt="Planet">
                         </div>
                         <div class="planet-info-large">
-                            <h2 id="planetModalName">Nombre del Planeta</h2>
-                            <p id="planetModalDescription">Descripción del planeta</p>
-                            <div class="planet-status-large" id="planetModalStatus">Estado</div>
+                            <h2 id="planetModalName">Planet Name</h2>
+                            <p id="planetModalDescription">Planet description</p>
+                            <div class="planet-status-large" id="planetModalStatus">Status</div>
                         </div>
                     </div>
                     
                     <div class="planet-content">
                         <div class="tasks-section">
-                            <h3>Tareas de Aprendizaje</h3>
+                            <h3>Learning Tasks</h3>
                             <div class="tasks-progress">
                                 <div class="progress-info">
-                                    <span class="completed-tasks" id="completedTasks">0</span> / <span class="total-tasks" id="totalTasks">0</span> tareas completadas
+                                    <span class="completed-tasks" id="completedTasks">0</span> / <span class="total-tasks" id="totalTasks">0</span> tasks completed
                                 </div>
                                 <div class="xp-earned">
                                     <span class="xp-icon">⭐</span>
-                                    <span class="xp-amount" id="xpEarned">0 XP</span> ganados
+                                    <span class="xp-amount" id="xpEarned">0 XP</span> earned
                                 </div>
                             </div>
                             <div class="tasks-list" id="planetModalTasks">
-                                <!-- Tareas se generarán dinámicamente -->
+                                <!-- Tasks will be generated dynamically -->
                             </div>
                             
                             <!-- Easter Egg Warning -->
                             <div class="easter-egg-warning" id="easterEggWarning" style="display: none;">
                                 <div class="warning-content">
-                                    <img src="assets/ui_elements/cerebrito.png" alt="Cerebrito" class="warning-icon">
+                                    <img src="assets/ui_elements/cerebrito.png" alt="Little Brain" class="warning-icon">
                                     <div class="warning-text">
-                                        <h4>¡Despacio, cerebrito! 🧠</h4>
-                                        <p>Solo puedes marcar una tarea a la vez. ¡Tómate tu tiempo para aprender!</p>
+                                        <h4>Slow down, little brain! 🧠</h4>
+                                        <p>You can only check one task at a time. Take your time to learn!</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="resources-section">
-                            <h3>Recursos Disponibles</h3>
+                            <h3>Available Resources</h3>
                             <div id="planetModalResources">
-                                <!-- Recursos se generarán dinámicamente -->
+                                <!-- Resources will be generated dynamically -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-secondary" id="closePlanetBtn">Cerrar</button>
-                <button class="btn-primary" id="startPlanetBtn">Comenzar Aprendizaje</button>
+                <button class="btn-secondary" id="closePlanetBtn">Close</button>
+                <button class="btn-primary" id="startPlanetBtn">Start Learning</button>
             </div>
         </div>
     </div>

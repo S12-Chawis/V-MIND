@@ -94,7 +94,9 @@ body {
     top: 0;
     z-index: 1000;
     transition: all 0.3s ease;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 100vh; /* Asegurar altura mínima */
 }
 
 .sidebar-content {
@@ -103,6 +105,7 @@ body {
     flex-direction: column;
     height: 100%;
     position: relative;
+    min-height: 100vh; /* Asegurar altura mínima */
 }
 
 /* Tarjeta 1: Avatar y Nombre (siempre visible) */
@@ -184,19 +187,99 @@ body {
     transform: rotate(180deg);
 }
 
-/* Tarjeta 2: XP y Racha (se despliega) */
+/* Mejorar la transición del dropdown */
 .profile-card-bottom {
     background: rgba(255, 255, 255, 0.03);
     border-radius: var(--border-radius-lg);
     border: 1px solid rgba(255, 255, 255, 0.05);
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease;
+    transition: all 0.4s ease; /* Simplificar transición */
     margin-bottom: 1rem;
+    opacity: 0;
+    transform: translateY(-10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    position: relative; /* Asegurar posicionamiento correcto */
+    display: block; /* Forzar display block */
 }
 
 .profile-card-top.expanded + .profile-card-bottom {
-    max-height: 300px;
+    max-height: 3000px !important; /* Aumentar significativamente para asegurar visibilidad completa */
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    overflow-y: auto; /* Permitir scroll si es necesario */
+    transition: max-height 0.6s ease, opacity 0.4s ease, transform 0.4s ease; /* Transición más suave */
+    z-index: 1001; /* Asegurar que esté por encima de otros elementos */
+}
+
+/* Alternativa usando clase directa */
+.profile-card-bottom.expanded {
+    max-height: 3000px !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    overflow-y: auto;
+    transition: max-height 0.6s ease, opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* Forzar visibilidad del dropdown expandido */
+.profile-card-bottom[style*="display: none"] {
+    display: block !important;
+}
+
+.profile-card-bottom.expanded {
+    display: block !important;
+    visibility: visible !important;
+}
+
+/* Debug: Asegurar que el dropdown sea visible */
+.profile-card-bottom.expanded,
+.profile-card-top.expanded + .profile-card-bottom {
+    max-height: 3000px !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    overflow-y: auto;
+}
+
+/* Forzar visibilidad usando múltiples selectores */
+#profileCardBottom.expanded,
+.profile-card-top.expanded ~ .profile-card-bottom,
+.profile-card-top.expanded + .profile-card-bottom {
+    max-height: 3000px !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    overflow-y: auto;
+    visibility: visible !important;
+}
+
+/* CSS más específico para forzar la visibilidad */
+.dashboard-sidebar .profile-card-bottom.expanded,
+.dashboard-sidebar .profile-card-top.expanded + .profile-card-bottom {
+    max-height: 3000px !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    overflow-y: auto;
+    visibility: visible !important;
+    display: block !important;
+}
+
+/* Regla adicional para asegurar visibilidad */
+.dashboard-sidebar .profile-card-bottom.expanded {
+    max-height: 3000px !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    overflow-y: auto;
+    visibility: visible !important;
+    display: block !important;
+}
+
+/* Debug: Mostrar todos los dropdowns para testing */
+.profile-card-bottom {
+    border: 1px solid red !important; /* Borde rojo para debug */
+}
+
+.profile-card-bottom.expanded {
+    border: 2px solid green !important; /* Borde verde cuando expandido */
 }
 
 .card-content {
@@ -204,6 +287,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    min-height: 300px; /* Aumentar altura mínima para el contenido */
+    position: relative; /* Asegurar posicionamiento */
 }
 
 /* XP Section */
@@ -349,6 +434,10 @@ body {
 /* Footer del sidebar */
 .sidebar-footer {
     margin-top: auto;
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
 .logout-btn {
@@ -375,6 +464,64 @@ body {
 }
 
 .logout-icon {
+    font-size: 1rem;
+}
+
+/* Botón de retomar encuesta */
+.retake-survey-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    margin-top: 0.75rem;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: var(--border-radius);
+    color: #3b82f6;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-normal);
+}
+
+.retake-survey-btn:hover {
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+    border-color: rgba(59, 130, 246, 0.3);
+    transform: translateY(-2px);
+}
+
+.survey-icon {
+    font-size: 1rem;
+}
+
+/* Botón de eliminar cuenta */
+.delete-account-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    margin-top: 0.75rem;
+    background: rgba(168, 85, 247, 0.1);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    border-radius: var(--border-radius);
+    color: #a855f7;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-normal);
+}
+
+.delete-account-btn:hover {
+    background: rgba(168, 85, 247, 0.2);
+    color: #a855f7;
+    border-color: rgba(168, 85, 247, 0.3);
+    transform: translateY(-2px);
+}
+
+.delete-icon {
     font-size: 1rem;
 }
 
@@ -962,18 +1109,75 @@ body {
     background: var(--gradient-primary);
 }
 
-.note-card h3 {
+/* Header de la nota con título y acciones */
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.note-title {
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--text-primary);
-    margin: 0 0 1rem 0;
+    margin: 0;
+    flex: 1;
 }
 
-.note-card .content {
+.note-actions {
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.note-card:hover .note-actions {
+    opacity: 1;
+}
+
+.note-action-btn {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+}
+
+.note-action-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+}
+
+.edit-btn:hover {
+    color: #3b82f6;
+}
+
+.delete-btn:hover {
+    color: #ef4444;
+}
+
+/* Contenido de la nota */
+.note-content {
     font-size: 0.9rem;
     color: var(--text-secondary);
     line-height: 1.5;
     margin-bottom: 1rem;
+    max-height: 100px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+/* Footer de la nota con tags y fecha */
+.note-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
 }
 
 .note-tags {
@@ -988,6 +1192,57 @@ body {
     padding: 0.25rem 0.5rem;
     border-radius: var(--border-radius);
     font-size: 0.7rem;
+}
+
+.note-date {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Estado vacío de las notas */
+.empty-notes {
+    text-align: center;
+    padding: 3rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--border-radius-lg);
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-notes h3 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.empty-notes p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+/* Botón primario */
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(93, 63, 211, 0.4);
 }
 
 /* Sección Recursos */

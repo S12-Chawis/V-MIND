@@ -9,7 +9,8 @@ const {
   deleteNote,
   getUserResources,
   saveResource,
-  getUserStats
+  getUserStats,
+  deleteAccount
 } = require('../controllers/userController');
 const { auth } = require('../middleware/auth');
 
@@ -32,5 +33,8 @@ router.post('/resources', saveResource);
 
 // Stats
 router.get('/stats', getUserStats);
+
+// Account management
+router.delete('/delete-account', deleteAccount);
 
 module.exports = router;

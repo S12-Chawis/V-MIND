@@ -371,6 +371,76 @@ const getUserStats = async (req, res) => {
   }
 };
 
+const deleteAccount = async (req, res) => {
+  try {
+    const userId = req.user.user_id;
+    const { email } = req.body;
+
+    // Verificar que el usuario existe y coincide con el email
+    const userQuery = 'SELECT user_id, email FROM users WHERE user_id = ? AND email = ?';
+    const [userRows] = await pool.execute(userQuery, [userId, email]);
+
+    if (userRows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Usuario no encontrado o email no coincide'
+      });
+    }
+
+    // Comenzar transacción para eliminar todos los datos del usuario
+    const connection = await pool.getConnection();
+    await connection.beginTransaction();
+
+    try {
+      // Eliminar datos relacionados en orden (por restricciones de clave foránea)
+      
+      // 1. Eliminar notas del usuario
+      await connection.execute('DELETE FROM notes WHERE user_id = ?', [userId]);
+      
+      // 2. Eliminar recursos del usuario
+      await connection.execute('DELETE FROM resources WHERE user_id = ?', [userId]);
+      
+      // 3. Eliminar tareas del usuario
+      await connection.execute('DELETE FROM user_tasks WHERE user_id = ?', [userId]);
+      
+      // 4. Eliminar intereses del usuario
+      await connection.execute('DELETE FROM interest_levels WHERE user_id = ?', [userId]);
+      
+      // 5. Eliminar rachas del usuario
+      await connection.execute('DELETE FROM streaks WHERE user_id = ?', [userId]);
+      
+      // 6. Eliminar triunfos del usuario
+      await connection.execute('DELETE FROM user_triumphs WHERE user_id = ?', [userId]);
+      
+      // 7. Finalmente, eliminar el usuario
+      await connection.execute('DELETE FROM users WHERE user_id = ?', [userId]);
+
+      // Confirmar transacción
+      await connection.commit();
+
+      res.json({
+        success: true,
+        message: 'Cuenta eliminada exitosamente'
+      });
+
+    } catch (error) {
+      // Revertir transacción en caso de error
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+
+  } catch (error) {
+    console.error('Delete account error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al eliminar la cuenta',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   getUserInterests,
   updateUserInterest,
@@ -380,5 +450,6 @@ module.exports = {
   deleteNote,
   getUserResources,
   saveResource,
-  getUserStats
+  getUserStats,
+  deleteAccount
 };

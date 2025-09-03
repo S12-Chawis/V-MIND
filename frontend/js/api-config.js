@@ -1,11 +1,34 @@
-// ===== CONFIGURACIÓN DE API =====
+/**
+ * V-Mind API Configuration and Client
+ * 
+ * This file provides a centralized configuration for all API endpoints and a robust
+ * HTTP client for making authenticated requests to the backend server.
+ * 
+ * Features:
+ * - Environment-aware base URL detection (local, staging, production)
+ * - Automatic JWT token management for authenticated requests
+ * - Comprehensive error handling with custom error types
+ * - Centralized endpoint configuration
+ * - Request/response interceptors for consistent error handling
+ * 
+ * @author V-Mind Team
+ * @version 2.0.0
+ */
 
+// ===== API CONFIGURATION =====
+
+/**
+ * API Configuration Class
+ * Manages API endpoints, base URLs, and default headers for different environments
+ */
 class ApiConfig {
     constructor() {
-        // Configuración base de la API
+        // Base API configuration
         this.baseURL = this.getBaseURL();
+        
+        // Centralized endpoint definitions for easy maintenance
         this.endpoints = {
-            // Autenticación
+            // Authentication endpoints
             login: '/api/auth/login',
             register: '/api/auth/register',
             logout: '/api/auth/logout',
@@ -13,44 +36,56 @@ class ApiConfig {
             forgotPassword: '/api/auth/forgot-password',
             resetPassword: '/api/auth/reset-password',
             
-            // Usuario
+            // User management endpoints
             profile: '/api/user/profile',
             updateProfile: '/api/user/profile',
             changePassword: '/api/user/change-password',
             
-            // Dashboard
+            // Dashboard and learning endpoints
             dashboard: '/api/dashboard/data',
             progress: '/api/user/progress',
             roadmaps: '/api/roadmaps',
         };
         
-        // Headers por defecto
+        // Default headers for all requests
         this.defaultHeaders = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         };
     }
 
+    /**
+     * Automatically detect the appropriate base URL based on current environment
+     * @returns {string} Base URL for API requests
+     */
     getBaseURL() {
-        // Detectar automáticamente el entorno
         const hostname = window.location.hostname;
         
         if (hostname === 'localhost' || hostname === '127.0.0.1') {
-            // Desarrollo local - Backend en puerto 3000
+            // Local development - Backend on port 3000
             return 'http://localhost:3000';
         } else if (hostname.includes('staging')) {
-            // Staging
+            // Staging environment
             return 'https://api-staging.vmind.com';
         } else {
-            // Producción
+            // Production environment
             return 'https://api.vmind.com';
         }
     }
 
+    /**
+     * Build full URL for a specific endpoint
+     * @param {string} endpoint - Endpoint key from this.endpoints
+     * @returns {string} Complete URL for the endpoint
+     */
     getFullURL(endpoint) {
         return this.baseURL + this.endpoints[endpoint];
     }
 
+    /**
+     * Get headers with authentication token if available
+     * @returns {Object} Headers object with optional Authorization header
+     */
     getAuthHeaders() {
         const token = localStorage.getItem('authToken');
         return {
@@ -60,15 +95,28 @@ class ApiConfig {
     }
 }
 
-// ===== CLASE PARA MANEJO DE API =====
+// ===== API CLIENT CLASS =====
 
+/**
+ * HTTP Client for making API requests
+ * Handles authentication, error handling, and request/response processing
+ */
 class ApiClient {
     constructor() {
         this.config = new ApiConfig();
     }
 
+    /**
+     * Make HTTP request to API endpoint
+     * @param {string} endpoint - Endpoint key from config
+     * @param {Object} options - Request options (method, body, headers, etc.)
+     * @returns {Promise<Object>} Parsed response data
+     * @throws {ApiError} When request fails
+     */
     async makeRequest(endpoint, options = {}) {
         const url = this.config.getFullURL(endpoint);
+        
+        // Determine headers based on authentication requirement
         const headers = options.requireAuth ? 
             this.config.getAuthHeaders() : 
             this.config.defaultHeaders;
@@ -82,7 +130,7 @@ class ApiClient {
             ...options
         };
 
-        // Agregar body si existe
+        // Add request body if provided
         if (options.body && typeof options.body === 'object') {
             requestOptions.body = JSON.stringify(options.body);
         }
@@ -90,13 +138,13 @@ class ApiClient {
         try {
             const response = await fetch(url, requestOptions);
             
-            // Manejar respuestas no exitosas
+            // Handle non-successful responses
             if (!response.ok) {
                 const errorData = await this.handleErrorResponse(response);
                 throw new ApiError(errorData.message, response.status, errorData);
             }
 
-            // Intentar parsear JSON
+            // Parse response based on content type
             const contentType = response.headers.get('content-type');
             if (contentType && contentType.includes('application/json')) {
                 return await response.json();
@@ -108,24 +156,29 @@ class ApiClient {
                 throw error;
             }
             
-            // Error de red o conexión
-            throw new ApiError('Error de conexión. Verifica tu conexión a internet.', 0, {
+            // Network or connection error
+            throw new ApiError('Connection error. Please check your internet connection.', 0, {
                 type: 'network_error',
                 originalError: error.message
             });
         }
     }
 
+    /**
+     * Handle error responses from the server
+     * @param {Response} response - Fetch Response object
+     * @returns {Object} Parsed error data
+     */
     async handleErrorResponse(response) {
         try {
             const errorData = await response.json();
             return {
-                message: errorData.message || 'Error del servidor',
+                message: errorData.message || 'Server error',
                 errors: errorData.errors || {},
                 ...errorData
             };
         } catch {
-            // Si no se puede parsear JSON, usar mensaje por defecto
+            // If JSON parsing fails, use default error message
             return {
                 message: this.getDefaultErrorMessage(response.status),
                 status: response.status
@@ -133,24 +186,35 @@ class ApiClient {
         }
     }
 
+    /**
+     * Get user-friendly error messages for common HTTP status codes
+     * @param {number} status - HTTP status code
+     * @returns {string} Human-readable error message
+     */
     getDefaultErrorMessage(status) {
         const errorMessages = {
-            400: 'Datos inválidos. Verifica la información ingresada.',
-            401: 'Credenciales incorrectas. Verifica tu usuario y contraseña.',
-            403: 'No tienes permisos para realizar esta acción.',
-            404: 'Recurso no encontrado.',
-            409: 'Conflicto: El usuario ya existe o hay datos duplicados.',
-            422: 'Datos de entrada inválidos.',
-            429: 'Demasiadas solicitudes. Intenta de nuevo más tarde.',
-            500: 'Error interno del servidor. Intenta de nuevo más tarde.',
-            502: 'Servidor no disponible temporalmente.',
-            503: 'Servicio no disponible. Intenta de nuevo más tarde.'
+            400: 'Invalid data. Please check the information entered.',
+            401: 'Incorrect credentials. Please verify your username and password.',
+            403: 'You do not have permission to perform this action.',
+            404: 'Resource not found.',
+            409: 'Conflict: User already exists or there are duplicate data.',
+            422: 'Invalid input data.',
+            429: 'Too many requests. Please try again later.',
+            500: 'Internal server error. Please try again later.',
+            502: 'Server temporarily unavailable.',
+            503: 'Service unavailable. Please try again later.'
         };
         
-        return errorMessages[status] || 'Error desconocido del servidor.';
+        return errorMessages[status] || 'Unknown server error.';
     }
 
-    // Métodos específicos para autenticación
+    // ===== AUTHENTICATION METHODS =====
+
+    /**
+     * Authenticate user with credentials
+     * @param {Object} credentials - User credentials (username/email, password)
+     * @returns {Promise<Object>} Authentication response with tokens
+     */
     async login(credentials) {
         return this.makeRequest('login', {
             method: 'POST',
@@ -158,6 +222,11 @@ class ApiClient {
         });
     }
 
+    /**
+     * Register new user account
+     * @param {Object} userData - User registration data
+     * @returns {Promise<Object>} Registration response
+     */
     async register(userData) {
         return this.makeRequest('register', {
             method: 'POST',
@@ -165,6 +234,10 @@ class ApiClient {
         });
     }
 
+    /**
+     * Logout current user (invalidate tokens)
+     * @returns {Promise<Object>} Logout response
+     */
     async logout() {
         return this.makeRequest('logout', {
             method: 'POST',
@@ -172,6 +245,10 @@ class ApiClient {
         });
     }
 
+    /**
+     * Refresh authentication token
+     * @returns {Promise<Object>} New token response
+     */
     async refreshToken() {
         const refreshToken = localStorage.getItem('refreshToken');
         return this.makeRequest('refresh', {
@@ -180,6 +257,11 @@ class ApiClient {
         });
     }
 
+    /**
+     * Request password reset
+     * @param {string} email - User's email address
+     * @returns {Promise<Object>} Password reset response
+     */
     async forgotPassword(email) {
         return this.makeRequest('forgotPassword', {
             method: 'POST',
@@ -187,6 +269,12 @@ class ApiClient {
         });
     }
 
+    /**
+     * Reset password with reset token
+     * @param {string} token - Password reset token
+     * @param {string} newPassword - New password
+     * @returns {Promise<Object>} Password reset confirmation
+     */
     async resetPassword(token, newPassword) {
         return this.makeRequest('resetPassword', {
             method: 'POST',
@@ -194,13 +282,23 @@ class ApiClient {
         });
     }
 
-    // Métodos para usuario
+    // ===== USER MANAGEMENT METHODS =====
+
+    /**
+     * Get current user's profile information
+     * @returns {Promise<Object>} User profile data
+     */
     async getUserProfile() {
         return this.makeRequest('profile', {
             requireAuth: true
         });
     }
 
+    /**
+     * Update user profile information
+     * @param {Object} profileData - Updated profile data
+     * @returns {Promise<Object>} Updated profile response
+     */
     async updateUserProfile(profileData) {
         return this.makeRequest('updateProfile', {
             method: 'PUT',
@@ -210,8 +308,12 @@ class ApiClient {
     }
 }
 
-// ===== CLASE DE ERROR PERSONALIZADA =====
+// ===== CUSTOM ERROR CLASS =====
 
+/**
+ * Custom API Error class for better error handling
+ * Provides methods to categorize errors and extract useful information
+ */
 class ApiError extends Error {
     constructor(message, status = 0, data = {}) {
         super(message);
@@ -220,29 +322,45 @@ class ApiError extends Error {
         this.data = data;
     }
 
+    /**
+     * Check if error is a network/connection issue
+     * @returns {boolean} True if network error
+     */
     isNetworkError() {
         return this.status === 0;
     }
 
+    /**
+     * Check if error is related to authentication/authorization
+     * @returns {boolean} True if authentication error
+     */
     isAuthError() {
         return this.status === 401 || this.status === 403;
     }
 
+    /**
+     * Check if error is due to invalid input data
+     * @returns {boolean} True if validation error
+     */
     isValidationError() {
         return this.status === 400 || this.status === 422;
     }
 
+    /**
+     * Check if error is a server-side issue
+     * @returns {boolean} True if server error
+     */
     isServerError() {
         return this.status >= 500;
     }
 }
 
-// ===== INSTANCIA GLOBAL =====
+// ===== GLOBAL INSTANCE =====
 
-// Crear instancia global del cliente API
+// Create global instance of API client for easy access
 window.apiClient = new ApiClient();
 
-// Exportar para uso en módulos
+// Export for module usage (Node.js compatibility)
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { ApiClient, ApiConfig, ApiError };
 }

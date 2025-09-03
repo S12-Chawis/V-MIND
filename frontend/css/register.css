@@ -1,0 +1,82 @@
+/* ===== ESTILOS ESPECÍFICOS PARA EL FORMULARIO DE REGISTRO SIMPLE ===== */
+
+/* Estilos para el campo de teléfono - AHORA COMPLETAMENTE IDÉNTICO A LOS DEMÁS CAMPOS */
+#phoneGroup {
+    /* Sin margin-bottom extra - usa el gap del .form-group */
+}
+
+#phoneGroup .form-label {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-left: 0.25rem;
+}
+
+#phoneGroup .login-input {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05); /* Mismo color de fondo que los otros campos */
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+#phoneGroup .login-input:focus {
+    outline: none;
+    border-color: var(--primary); /* Mismo color de borde al enfocar */
+    box-shadow: 0 0 0 3px rgba(93, 63, 211, 0.2), var(--shadow-glow); /* Misma sombra que los otros campos */
+    background: rgba(255, 255, 255, 0.08);
+}
+
+#phoneGroup .login-input::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* Estilos para el mensaje de error del teléfono */
+#phoneGroup .error-message {
+    color: var(--error);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    margin-left: 0.25rem;
+    display: none;
+}
+
+#phoneGroup.error .error-message {
+    display: block;
+}
+
+#phoneGroup.error .login-input {
+    border-color: var(--error);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2); /* Misma sombra de error que los otros campos */
+}
+
+/* Animación de entrada para el campo de teléfono */
+#phoneGroup {
+    animation: slideInUp 0.6s ease-out;
+    animation-delay: 0.2s;
+    animation-fill-mode: both;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive para el campo de teléfono */
+@media (max-width: 768px) {
+    #phoneGroup .login-input {
+        font-size: 16px; /* Evita zoom en iOS */
+    }
+}

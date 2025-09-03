@@ -144,10 +144,101 @@ const getTaskProgress = async (req, res) => {
   }
 };
 
+const updateUserTaskStatus = async (req, res) => {
+  try {
+    const { taskId, status } = req.body;
+    const userId = req.user.user_id;
+
+    // Primero verificar si ya existe una entrada en user_tasks
+    const checkQuery = `
+      SELECT user_task_id FROM user_tasks 
+      WHERE user_id = ? AND task_id = ?
+    `;
+    
+    const [existingTasks] = await pool.execute(checkQuery, [userId, taskId]);
+    
+    if (existingTasks.length === 0) {
+      // Crear nueva entrada en user_tasks
+      const userTaskId = uuidv4();
+      const insertQuery = `
+        INSERT INTO user_tasks (user_task_id, user_id, task_id, status, date_completed)
+        VALUES (?, ?, ?, ?, ?)
+      `;
+      
+      const dateCompleted = status === 'completed' ? new Date() : null;
+      await pool.execute(insertQuery, [userTaskId, userId, taskId, status, dateCompleted]);
+    } else {
+      // Actualizar entrada existente
+      const updateQuery = `
+        UPDATE user_tasks 
+        SET status = ?, date_completed = ?
+        WHERE user_id = ? AND task_id = ?
+      `;
+      
+      const dateCompleted = status === 'completed' ? new Date() : null;
+      await pool.execute(updateQuery, [status, dateCompleted, userId, taskId]);
+    }
+
+    res.json({
+      success: true,
+      message: 'Task status updated successfully'
+    });
+
+  } catch (error) {
+    console.error('Update user task status error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error updating task status',
+      error: error.message
+    });
+  }
+};
+
+const getUserRoadmapTasks = async (req, res) => {
+  try {
+    const userId = req.user.user_id;
+    
+    // Obtener todas las tareas con su estado para el usuario
+    const query = `
+      SELECT 
+        t.task_id,
+        t.title,
+        t.description,
+        t.type,
+        t.xp_reward,
+        l.title as level_title,
+        l.roadmap_id,
+        COALESCE(ut.status, 'pending') as user_status,
+        ut.date_completed
+      FROM tasks t
+      LEFT JOIN levels l ON t.level_id = l.level_id
+      LEFT JOIN user_tasks ut ON t.task_id = ut.task_id AND ut.user_id = ?
+      ORDER BY l.order_number, t.task_id
+    `;
+    
+    const [tasks] = await pool.execute(query, [userId]);
+    
+    res.json({
+      success: true,
+      data: tasks
+    });
+
+  } catch (error) {
+    console.error('Get user roadmap tasks error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error getting roadmap tasks',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   getTasksByLevel,
   getUserTasks,
   completeTask,
   assignTaskToUser,
-  getTaskProgress
+  getTaskProgress,
+  updateUserTaskStatus,
+  getUserRoadmapTasks
 };

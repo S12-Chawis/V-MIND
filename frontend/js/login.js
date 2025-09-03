@@ -1,35 +1,72 @@
-// ===== FUNCIONALIDAD DE LOGIN =====
+/**
+ * V-Mind Login Manager
+ * 
+ * This file handles all login-related functionality including:
+ * - User authentication with the backend API
+ * - Form validation and error handling
+ * - Smooth animations and user experience enhancements
+ * - Integration with registration flow (temp user data)
+ * - Password reset functionality
+ * - Session management and redirection
+ * 
+ * Key Features:
+ * - Real-time form validation with visual feedback
+ * - Smooth entrance animations for form elements
+ * - Auto-completion from registration data
+ * - Comprehensive error handling and user feedback
+ * - Secure password handling and API communication
+ * 
+ * @author V-Mind Team
+ * @version 2.0.0
+ */
 
+// ===== LOGIN FUNCTIONALITY =====
+
+/**
+ * Main Login Manager Class
+ * Handles all aspects of user authentication and login experience
+ */
 class LoginManager {
     constructor() {
+        // Core form elements
         this.form = document.getElementById('loginForm');
         this.usernameInput = document.getElementById('username');
         this.passwordInput = document.getElementById('password');
         this.loginButton = document.getElementById('loginButton');
+        
+        // State management
         this.isLoading = false;
         
+        // Initialize the login system
         this.init();
     }
 
+    /**
+     * Initialize login system with all necessary setup
+     */
     init() {
         this.setupEventListeners();
         this.setupFormValidation();
         this.setupAnimations();
+        this.checkForTempUserData();
     }
 
+    /**
+     * Set up all event listeners for form interactions
+     */
     setupEventListeners() {
-        // Evento de submit del formulario
+        // Form submission event
         this.form.addEventListener('submit', (e) => this.handleSubmit(e));
         
-        // Eventos de input para validación en tiempo real
+        // Real-time input validation events
         this.usernameInput.addEventListener('input', () => this.validateField('username'));
         this.passwordInput.addEventListener('input', () => this.validateField('password'));
         
-        // Eventos de focus para mejorar UX
+        // Focus events for better UX
         this.usernameInput.addEventListener('focus', () => this.clearError('username'));
         this.passwordInput.addEventListener('focus', () => this.clearError('password'));
         
-        // Enlaces adicionales
+        // Additional navigation links
         document.getElementById('registerLink')?.addEventListener('click', (e) => {
             e.preventDefault();
             this.redirectToRegister();
@@ -41,8 +78,11 @@ class LoginManager {
         });
     }
 
+    /**
+     * Configure form validation rules and patterns
+     */
     setupFormValidation() {
-        // Configuración de validación
+        // Validation configuration for each field
         this.validationRules = {
             username: {
                 required: true,
@@ -56,8 +96,12 @@ class LoginManager {
         };
     }
 
+    /**
+     * Set up entrance animations for form elements
+     * Creates a staggered animation effect for better visual appeal
+     */
     setupAnimations() {
-        // Animaciones de entrada escalonadas
+        // Staggered entrance animations for form elements
         const formElements = this.form.querySelectorAll('.form-group, .login-button');
         formElements.forEach((element, index) => {
             element.style.opacity = '0';
@@ -71,12 +115,38 @@ class LoginManager {
         });
     }
 
+    /**
+     * Check for temporary user data from registration process
+     * Auto-fills email field and shows welcome message
+     */
+    checkForTempUserData() {
+        // Check if there's temporary user data (after registration)
+        const tempUserData = localStorage.getItem('tempUserData');
+        if (tempUserData) {
+            try {
+                const userData = JSON.parse(tempUserData);
+                // Auto-fill email field
+                if (userData.email) {
+                    this.usernameInput.value = userData.email;
+                    // Show informational message
+                    this.showInfoMessage(`Hello ${userData.username}, complete your password to continue.`);
+                }
+            } catch (error) {
+                console.error('Error processing temporary data:', error);
+            }
+        }
+    }
+
+    /**
+     * Handle form submission and authentication
+     * @param {Event} e - Form submit event
+     */
     async handleSubmit(e) {
         e.preventDefault();
         
         if (this.isLoading) return;
         
-        // Validar todos los campos
+        // Validate all fields before submission
         const isValid = this.validateAllFields();
         if (!isValid) return;
         
@@ -423,6 +493,32 @@ class LoginManager {
         setTimeout(() => {
             errorDiv.remove();
         }, duration);
+    }
+
+    showInfoMessage(message) {
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'info-message';
+        infoDiv.style.cssText = `
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--info);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-card);
+            z-index: 9999;
+            animation: slideInRight 0.5s ease-out;
+            max-width: 400px;
+            word-wrap: break-word;
+        `;
+        infoDiv.textContent = message;
+        
+        document.body.appendChild(infoDiv);
+        
+        setTimeout(() => {
+            infoDiv.remove();
+        }, 5000); // Mensaje de información dura más tiempo
     }
 
     redirectToRegister() {

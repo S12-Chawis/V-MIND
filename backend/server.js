@@ -11,6 +11,7 @@ const authRoutes = require('./routes/auth');
 const roadmapRoutes = require('./routes/roadmaps');
 const taskRoutes = require('./routes/tasks');
 const userRoutes = require('./routes/users');
+const noteRoutes = require('./routes/notes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -51,9 +52,10 @@ app.get('/health', (req, res) => {
 
 // API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/roadmaps', roadmapRoutes);
 app.use('/api/tasks', taskRoutes);
-app.use('/api/users', userRoutes);
+app.use('/api/notes', noteRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
@@ -88,6 +90,7 @@ const startServer = async () => {
       console.log(`🗺️  Roadmap endpoints: http://localhost:${PORT}/api/roadmaps`);
       console.log(`✅ Task endpoints: http://localhost:${PORT}/api/tasks`);
       console.log(`👤 User endpoints: http://localhost:${PORT}/api/users`);
+      console.log(`📝 Note endpoints: http://localhost:${PORT}/api/notes`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);

@@ -1,101 +1,138 @@
+/**
+ * V-Mind Dashboard - Main Application Controller
+ * 
+ * This file contains the core dashboard functionality including:
+ * - User interface management and navigation
+ * - Learning roadmap personalization based on survey results
+ * - Task management and progress tracking
+ * - Notes system with rich text editing
+ * - Resource management and organization
+ * - Progress visualization with charts
+ * - User profile and account management
+ * 
+ * Key Features:
+ * - Dynamic roadmap switching (Python, JavaScript, Java, C#)
+ * - Interactive planet-based learning interface
+ * - Real-time progress tracking and XP system
+ * - Persistent data storage (localStorage + database)
+ * - Responsive design with smooth animations
+ * 
+ * @author V-Mind Team
+ * @version 2.0.0
+ */
+
 // ===== DASHBOARD CON NAVEGACIÓN POR SCROLL STICKY =====
 
+/**
+ * Main Dashboard Class
+ * Manages all dashboard functionality including UI, data, and user interactions
+ */
 class Dashboard {
     constructor() {
+        // Core navigation and state management
         this.currentSection = 'home';
-        this.sections = ['home', 'roadmap', 'notas', 'recursos'];
+        this.sections = ['home', 'roadmap', 'notes', 'resources'];
+        
+        // Inspirational quotes for user motivation
         this.quotes = [
-            { text: "El aprendizaje es un tesoro que seguirá a su dueño a todas partes.", author: "Proverbio chino" },
-            { text: "La educación es el arma más poderosa que puedes usar para cambiar el mundo.", author: "Nelson Mandela" },
-            { text: "El conocimiento es poder, pero la práctica es la clave del dominio.", author: "Confucio" },
-            { text: "Cada día es una nueva oportunidad para aprender algo nuevo.", author: "Desconocido" },
-            { text: "La mente que se abre a una nueva idea nunca vuelve a su tamaño original.", author: "Albert Einstein" }
+            { text: "Learning is a treasure that will follow its owner everywhere.", author: "Chinese Proverb" },
+            { text: "Education is the most powerful weapon you can use to change the world.", author: "Nelson Mandela" },
+            { text: "Knowledge is power, but practice is the key to mastery.", author: "Confucius" },
+            { text: "Every day is a new opportunity to learn something new.", author: "Unknown" },
+            { text: "The mind that opens to a new idea never returns to its original size.", author: "Albert Einstein" }
         ];
+        
+        // Data storage for user content
         this.notes = [];
         this.resources = [];
         this.charts = {};
+        
+        // Rich text editors for notes and resources
         this.quillEditor = null;
         this.resourceQuillEditor = null;
         
-        // Variables del slider
+        // Interactive slider variables for roadmap navigation
         this.currentPlanetIndex = 0;
         this.isDragging = false;
         this.dragStartX = 0;
         this.dragStartY = 0;
         this.dragStartScrollLeft = 0;
         
-        // Datos del roadmap de Python con tareas
+        // Current active roadmap (dynamically set based on user survey)
+        this.currentRoadmap = null;
+        
+        // Python Roadmap (default fallback)
         this.pythonRoadmap = {
             fundamentals: {
-                name: "Fundamentos de Python",
-                description: "Los cimientos de tu viaje de programación",
+                name: "Python Fundamentals",
+                description: "The foundations of your programming journey",
                 status: "completed",
                 tasks: [
-                    { id: 1, title: "Crear tu primer programa 'Hola Mundo'", description: "Escribe y ejecuta tu primer código Python", xp: 50, completed: false },
-                    { id: 2, title: "Aprender sobre variables", description: "Entiende cómo crear y usar variables", xp: 75, completed: false },
-                    { id: 3, title: "Practicar con tipos de datos", description: "Trabaja con strings, números y booleanos", xp: 100, completed: false },
-                    { id: 4, title: "Usar operadores básicos", description: "Aprende operadores aritméticos y lógicos", xp: 75, completed: false },
-                    { id: 5, title: "Crear tu primer proyecto", description: "Combina todo lo aprendido en un proyecto", xp: 150, completed: false }
+                    { id: 1, title: "Create your first 'Hello World' program", description: "Write and run your first Python code", xp: 50, completed: false },
+                    { id: 2, title: "Learn about variables", description: "Understand how to create and use variables", xp: 75, completed: false },
+                    { id: 3, title: "Practice with data types", description: "Work with strings, numbers and booleans", xp: 100, completed: false },
+                    { id: 4, title: "Use basic operators", description: "Learn arithmetic and logical operators", xp: 75, completed: false },
+                    { id: 5, title: "Create your first project", description: "Combine everything learned in a project", xp: 150, completed: false }
                 ],
                 resources: [
-                    "Video: Introducción a Python",
-                    "Documentación oficial de Python",
-                    "Ejercicios prácticos interactivos",
-                    "Quiz de fundamentos"
+                    "Video: Introduction to Python",
+                    "Official Python documentation",
+                    "Interactive practical exercises",
+                    "Fundamentals quiz"
                 ]
             },
             "control-flow": {
-                name: "Control de Flujo",
-                description: "Aprende a controlar el flujo de tu programa",
+                name: "Control Flow",
+                description: "Learn to control the flow of your program",
                 status: "in-progress",
                 tasks: [
-                    { id: 1, title: "Usar condicionales if/else", description: "Aprende a tomar decisiones en tu código", xp: 100, completed: false },
-                    { id: 2, title: "Implementar bucles for", description: "Repite acciones con bucles", xp: 125, completed: false },
-                    { id: 3, title: "Trabajar con bucles while", description: "Bucles con condición de parada", xp: 125, completed: false },
-                    { id: 4, title: "Crear funciones básicas", description: "Organiza tu código en funciones", xp: 150, completed: false },
-                    { id: 5, title: "Proyecto: Calculadora", description: "Crea una calculadora usando control de flujo", xp: 200, completed: false }
+                    { id: 1, title: "Use if/else conditionals", description: "Learn to make decisions in your code", xp: 100, completed: false },
+                    { id: 2, title: "Implement for loops", description: "Repeat actions with loops", xp: 125, completed: false },
+                    { id: 3, title: "Work with while loops", description: "Loops with stop condition", xp: 125, completed: false },
+                    { id: 4, title: "Create basic functions", description: "Organize your code in functions", xp: 150, completed: false },
+                    { id: 5, title: "Project: Calculator", description: "Create a calculator using control flow", xp: 200, completed: false }
                 ],
                 resources: [
-                    "Video: Control de flujo en Python",
-                    "Tutorial interactivo de funciones",
-                    "Ejercicios de lógica de programación",
-                    "Proyecto: Calculadora básica"
+                    "Video: Control flow in Python",
+                    "Interactive functions tutorial",
+                    "Programming logic exercises",
+                    "Project: Basic calculator"
                 ]
             },
             "data-structures": {
-                name: "Estructuras de Datos",
-                description: "Organiza y manipula datos eficientemente",
+                name: "Data Structures",
+                description: "Organize and manipulate data efficiently",
                 status: "locked",
                 tasks: [
-                    { id: 1, title: "Trabajar con listas", description: "Aprende a crear y manipular listas", xp: 100, completed: false },
-                    { id: 2, title: "Usar tuplas", description: "Entiende las tuplas y sus características", xp: 75, completed: false },
-                    { id: 3, title: "Crear diccionarios", description: "Organiza datos con pares clave-valor", xp: 125, completed: false },
-                    { id: 4, title: "Operaciones con sets", description: "Trabaja con conjuntos únicos", xp: 100, completed: false },
-                    { id: 5, title: "Comprensión de listas", description: "Optimiza tu código con comprensiones", xp: 150, completed: false }
+                    { id: 1, title: "Work with lists", description: "Learn to create and manipulate lists", xp: 100, completed: false },
+                    { id: 2, title: "Use tuples", description: "Understand tuples and their characteristics", xp: 75, completed: false },
+                    { id: 3, title: "Create dictionaries", description: "Organize data with key-value pairs", xp: 125, completed: false },
+                    { id: 4, title: "Set operations", description: "Work with unique sets", xp: 100, completed: false },
+                    { id: 5, title: "List comprehensions", description: "Optimize your code with comprehensions", xp: 150, completed: false }
                 ],
                 resources: [
-                    "Video: Estructuras de datos en Python",
-                    "Guía completa de diccionarios",
-                    "Ejercicios de manipulación de datos",
-                    "Proyecto: Sistema de inventario"
+                    "Video: Data structures in Python",
+                    "Complete dictionary guide",
+                    "Data manipulation exercises",
+                    "Project: Inventory system"
                 ]
             },
             "functions": {
-                name: "Funciones Avanzadas",
-                description: "Domina las funciones y técnicas avanzadas",
+                name: "Advanced Functions",
+                description: "Master functions and advanced techniques",
                 status: "locked",
                 tasks: [
-                    { id: 1, title: "Crear funciones lambda", description: "Funciones anónimas para operaciones simples", xp: 100, completed: false },
-                    { id: 2, title: "Implementar decoradores", description: "Modifica funciones con decoradores", xp: 150, completed: false },
-                    { id: 3, title: "Trabajar con generadores", description: "Crea iteradores eficientes", xp: 125, completed: false },
-                    { id: 4, title: "Funciones recursivas", description: "Funciones que se llaman a sí mismas", xp: 150, completed: false },
-                    { id: 5, title: "Args y kwargs", description: "Funciones con argumentos variables", xp: 125, completed: false }
+                    { id: 1, title: "Create lambda functions", description: "Anonymous functions for simple operations", xp: 100, completed: false },
+                    { id: 2, title: "Implement decorators", description: "Modify functions with decorators", xp: 150, completed: false },
+                    { id: 3, title: "Work with generators", description: "Create efficient iterators", xp: 125, completed: false },
+                    { id: 4, title: "Recursive functions", description: "Functions that call themselves", xp: 150, completed: false },
+                    { id: 5, title: "Args and kwargs", description: "Functions with variable arguments", xp: 125, completed: false }
                 ],
                 resources: [
-                    "Video: Funciones avanzadas",
-                    "Tutorial de decoradores",
-                    "Guía de generadores",
-                    "Proyecto: Framework de decoradores"
+                    "Video: Advanced functions",
+                    "Decorators tutorial",
+                    "Generators guide",
+                    "Project: Decorators framework"
                 ]
             },
             "oop": {
@@ -211,45 +248,108 @@ class Dashboard {
         this.init();
     }
 
-    init() {
-        this.loadUserData();
-        this.setupEventListeners();
-        this.initializeScrollNavigation();
-        this.renderDashboard();
-        this.initializeCharts();
-        this.loadNotes();
-        this.loadResources();
-        this.setupQuillEditor();
-        this.setupResourceQuillEditor();
-        this.renderRoadmap();
-        this.setupDragAndDrop();
+    async init() {
+        try {
+            // Verificar autenticación antes de continuar
+            if (!this.checkAuthentication()) {
+                return;
+            }
+            
+            this.loadUserData();
+            this.setupEventListeners();
+            this.initializeScrollNavigation();
+            this.renderDashboard();
+            this.initializeCharts();
+            await this.loadNotes();
+            this.loadResources();
+            this.setupQuillEditor();
+            this.setupResourceQuillEditor();
+            this.renderRoadmap();
+            this.setupDragAndDrop();
+            
+            // Cargar tareas del usuario desde la base de datos
+            await this.loadUserTasksFromDatabase();
+            
+            // Aplicar personalización basada en la encuesta
+            this.applySurveyPersonalization();
+            
+            // Asegurar que el roadmap se inicialice correctamente después de que todo esté listo
+            setTimeout(() => {
+                this.initializeRoadmap();
+            }, 500);
+            
+        } catch (error) {
+            console.error('Error during dashboard initialization:', error);
+            // Si hay error, limpiar datos corruptos y redirigir
+            localStorage.removeItem('userData');
+            localStorage.removeItem('authToken');
+            window.location.href = 'login.html';
+        }
+    }
+
+    checkAuthentication() {
+        const userData = localStorage.getItem('userData');
+        const authToken = localStorage.getItem('authToken');
+        const loginTimestamp = localStorage.getItem('loginTimestamp');
         
-        // Asegurar que el roadmap se inicialice correctamente después de que todo esté listo
-        setTimeout(() => {
-            this.initializeRoadmap();
-        }, 500);
+        if (!userData || !authToken) {
+            console.log('Authentication check failed - missing data or token');
+            return false;
+        }
+        
+        // Verificar si el token ha expirado (24 horas)
+        if (loginTimestamp) {
+            const loginTime = parseInt(loginTimestamp);
+            const currentTime = Date.now();
+            const tokenAge = currentTime - loginTime;
+            const maxAge = 24 * 60 * 60 * 1000; // 24 horas en milisegundos
+            
+            if (tokenAge > maxAge) {
+                console.log('Token expired, redirecting to login');
+                localStorage.removeItem('userData');
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('loginTimestamp');
+                return false;
+            }
+        }
+        
+        try {
+            JSON.parse(userData);
+            return true;
+        } catch (error) {
+            console.error('Invalid user data format:', error);
+            localStorage.removeItem('userData');
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('loginTimestamp');
+            return false;
+        }
     }
 
     loadUserData() {
-        const userData = localStorage.getItem('userData');
-        if (!userData) {
-            window.location.href = 'login.html';
-            return;
-        }
-
         try {
+            const userData = localStorage.getItem('userData');
             const parsedUserData = JSON.parse(userData);
-            const user = TestUsers.getUserById(parsedUserData.id);
             
-            if (user) {
-                this.userData = user;
-                this.updateUserInterface();
-            } else {
-                window.location.href = 'login.html';
-            }
+            console.log('Raw user data from localStorage:', parsedUserData);
+            
+            // Usar los datos reales del usuario del localStorage
+            this.userData = {
+                id: parsedUserData.id,
+                name: parsedUserData.username || parsedUserData.name,
+                email: parsedUserData.email,
+                level: parsedUserData.level || 0,
+                points: parsedUserData.level * 100 || 0, // XP basado en nivel
+                streak: 3, // Valor por defecto
+                objetive: parsedUserData.objetivo || 'Aprender programación',
+                rol: parsedUserData.rol || 'user'
+            };
+            
+            console.log('User data loaded successfully:', this.userData);
+            this.updateUserInterface();
+            
         } catch (error) {
             console.error('Error loading user data:', error);
-            window.location.href = 'login.html';
+            throw error; // Dejar que checkAuthentication maneje el redirect
         }
     }
 
@@ -257,20 +357,49 @@ class Dashboard {
         // Actualizar sidebar
         document.getElementById('sidebarUserName').textContent = this.userData.name;
         document.getElementById('sidebarAvatar').src = 'assets/ui_elements/avatar.png';
-        document.getElementById('sidebarXPFill').style.width = `${(this.userData.points / 2000) * 100}%`;
-        document.getElementById('sidebarXP').textContent = this.userData.points.toLocaleString();
-        document.getElementById('sidebarXPNext').textContent = '2,000';
+        
+        // Calcular XP y progreso
+        const currentXP = this.userData.points;
+        const nextLevelXP = (this.userData.level + 1) * 200; // XP necesario para siguiente nivel
+        const progressPercentage = Math.min((currentXP / nextLevelXP) * 100, 100);
+        
+        document.getElementById('sidebarXPFill').style.width = `${progressPercentage}%`;
+        document.getElementById('sidebarXP').textContent = currentXP.toLocaleString();
+        document.getElementById('sidebarXPNext').textContent = nextLevelXP.toLocaleString();
 
         // Actualizar home
         document.getElementById('userName').textContent = this.userData.name;
         
-        // Actualizar cita inspiradora
-        const randomQuote = this.quotes[Math.floor(Math.random() * this.quotes.length)];
-        document.getElementById('quoteText').textContent = randomQuote.text;
-        document.getElementById('quoteAuthor').textContent = `- ${randomQuote.author}`;
+        // Actualizar cita inspiradora o mensaje personalizado
+        const surveyData = localStorage.getItem('userSurveyData');
+        if (surveyData) {
+            try {
+                const survey = JSON.parse(surveyData);
+                const personalizedMessage = this.getPersonalizedMessage(survey);
+                document.getElementById('quoteText').textContent = personalizedMessage.text;
+                document.getElementById('quoteAuthor').textContent = personalizedMessage.author;
+            } catch (error) {
+                // Si hay error, usar cita por defecto
+                const randomQuote = this.quotes[Math.floor(Math.random() * this.quotes.length)];
+                document.getElementById('quoteText').textContent = randomQuote.text;
+                document.getElementById('quoteAuthor').textContent = `- ${randomQuote.author}`;
+            }
+        } else {
+            // Si no hay encuesta, usar cita por defecto
+            const randomQuote = this.quotes[Math.floor(Math.random() * this.quotes.length)];
+            document.getElementById('quoteText').textContent = randomQuote.text;
+            document.getElementById('quoteAuthor').textContent = `- ${randomQuote.author}`;
+        }
 
         // Actualizar streak
         this.updateStreakDisplay();
+        
+        console.log('User interface updated with:', {
+            name: this.userData.name,
+            level: this.userData.level,
+            points: this.userData.points,
+            progress: `${progressPercentage}%`
+        });
     }
 
     updateStreakDisplay() {
@@ -368,6 +497,19 @@ class Dashboard {
         document.getElementById('sidebarLogoutBtn').addEventListener('click', () => {
             this.logout();
         });
+
+        // Eliminar cuenta
+        document.getElementById('sidebarDeleteAccountBtn').addEventListener('click', () => {
+            this.deleteAccount();
+        });
+
+        // Retomar encuesta
+        const retakeSurveyBtn = document.getElementById('sidebarRetakeSurveyBtn');
+        if (retakeSurveyBtn) {
+            retakeSurveyBtn.addEventListener('click', () => {
+                this.retakeSurvey();
+            });
+        }
 
         // Event listeners para modales
         document.addEventListener('click', (e) => {
@@ -467,7 +609,40 @@ class Dashboard {
 
     toggleProfileCard() {
         const profileCardTop = document.getElementById('profileCardTop');
-        profileCardTop.classList.toggle('expanded');
+        const profileCardBottom = document.getElementById('profileCardBottom');
+        const expandIcon = document.getElementById('expandIcon');
+        
+        const isExpanded = profileCardTop.classList.contains('expanded');
+        
+        if (isExpanded) {
+            // Cerrar dropdown
+            profileCardTop.classList.remove('expanded');
+            expandIcon.style.transform = 'rotate(0deg)';
+            
+            // Cerrar el dropdown con transición suave
+            if (profileCardBottom) {
+                profileCardBottom.style.maxHeight = '0px';
+                profileCardBottom.style.opacity = '0';
+                profileCardBottom.style.transform = 'translateY(-10px)';
+            }
+        } else {
+            // Abrir dropdown
+            profileCardTop.classList.add('expanded');
+            expandIcon.style.transform = 'rotate(180deg)';
+            
+            // Abrir el dropdown con transición suave
+            if (profileCardBottom) {
+                // Primero hacer visible
+                profileCardBottom.style.opacity = '1';
+                profileCardBottom.style.transform = 'translateY(0)';
+                
+                // Luego expandir la altura
+                setTimeout(() => {
+                    const scrollHeight = profileCardBottom.scrollHeight;
+                    profileCardBottom.style.maxHeight = scrollHeight + 'px';
+                }, 10);
+            }
+        }
     }
 
     initializeCharts() {
@@ -841,37 +1016,113 @@ class Dashboard {
         });
     }
 
-    loadNotes() {
-        const savedNotes = localStorage.getItem('userNotes');
-        this.notes = savedNotes ? JSON.parse(savedNotes) : [
-            {
-                id: 1,
-                title: 'Conceptos de Python',
-                content: '<p>Variables, funciones, clases...</p>',
-                tags: ['python', 'fundamentos'],
-                createdAt: new Date().toISOString()
+    async loadNotes() {
+        try {
+            const authToken = localStorage.getItem('authToken');
+            const response = await fetch('http://localhost:3000/api/notes/user', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al cargar las notas desde la base de datos');
             }
-        ];
-        this.renderNotes();
+
+            const result = await response.json();
+            this.notes = result.data.map(note => ({
+                id: note.note_id,
+                title: note.title,
+                content: note.content,
+                tags: [], // Por ahora no implementamos tags en la BD
+                createdAt: note.created_at,
+                updatedAt: note.updated_at
+            }));
+            
+            this.renderNotes();
+        } catch (error) {
+            console.error('Error al cargar notas desde la base de datos:', error);
+            // Si hay error, usar localStorage como respaldo
+            const userId = this.userData.id;
+            const savedNotes = localStorage.getItem(`userNotes_${userId}`);
+            this.notes = savedNotes ? JSON.parse(savedNotes) : [];
+            this.renderNotes();
+        }
     }
 
     renderNotes() {
         const notesGrid = document.getElementById('notesGrid');
         notesGrid.innerHTML = '';
 
+        if (this.notes.length === 0) {
+            notesGrid.innerHTML = `
+                <div class="empty-notes">
+                    <div class="empty-icon">📝</div>
+                    <h3>No tienes notas aún</h3>
+                    <p>Crea tu primera nota para comenzar a organizar tu aprendizaje</p>
+                    <button class="btn-primary" onclick="dashboard.openNoteModal()">
+                        <span>+</span> Crear Primera Nota
+                    </button>
+                </div>
+            `;
+            return;
+        }
+
         this.notes.forEach(note => {
             const noteCard = document.createElement('div');
             noteCard.className = 'note-card';
+            
+            // Formatear fecha
+            const date = new Date(note.updatedAt || note.createdAt);
+            const formattedDate = date.toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
             noteCard.innerHTML = `
-                <h3>${note.title}</h3>
-                <div class="content">${note.content}</div>
-                <div class="note-tags">
-                    ${note.tags.map(tag => `<span class="note-tag">${tag}</span>`).join('')}
+                <div class="note-header">
+                    <h3 class="note-title">${note.title}</h3>
+                    <div class="note-actions">
+                        <button class="note-action-btn edit-btn" title="Editar nota">
+                            <span>✏️</span>
+                        </button>
+                        <button class="note-action-btn delete-btn" title="Eliminar nota">
+                            <span>🗑️</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="note-content">${note.content}</div>
+                <div class="note-footer">
+                    <div class="note-tags">
+                        ${note.tags.map(tag => `<span class="note-tag">${tag}</span>`).join('')}
+                    </div>
+                    <div class="note-date">${formattedDate}</div>
                 </div>
             `;
+            
+            // Event listeners para los botones
+            const editBtn = noteCard.querySelector('.edit-btn');
+            const deleteBtn = noteCard.querySelector('.delete-btn');
+            
+            editBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.editNote(note);
+            });
+            
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.deleteNote(note.id);
+            });
+            
+            // Click en la tarjeta para editar
             noteCard.addEventListener('click', () => {
                 this.editNote(note);
             });
+            
             notesGrid.appendChild(noteCard);
         });
     }
@@ -1116,7 +1367,7 @@ class Dashboard {
         this.currentEditingNote = null;
     }
 
-    saveNote() {
+    async saveNote() {
         const title = document.getElementById('noteTitle').value.trim();
         const content = this.quillEditor.root.innerHTML;
         const tags = document.getElementById('noteTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
@@ -1126,30 +1377,115 @@ class Dashboard {
             return;
         }
 
-        if (this.currentEditingNote) {
-            // Editar nota existente
-            this.currentEditingNote.title = title;
-            this.currentEditingNote.content = content;
-            this.currentEditingNote.tags = tags;
-        } else {
-            // Crear nueva nota
-            const newNote = {
-                id: Date.now(),
-                title,
-                content,
-                tags,
-                createdAt: new Date().toISOString()
-            };
-            this.notes.unshift(newNote);
-        }
+        try {
+            const authToken = localStorage.getItem('authToken');
+            
+            if (this.currentEditingNote) {
+                // Editar nota existente
+                const response = await fetch(`http://localhost:3000/api/notes/${this.currentEditingNote.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        title,
+                        content,
+                        tags
+                    })
+                });
 
-        localStorage.setItem('userNotes', JSON.stringify(this.notes));
-        this.renderNotes();
-        this.closeNoteModal();
+                if (!response.ok) {
+                    throw new Error('Error al actualizar la nota');
+                }
+
+                // Actualizar la nota local
+                this.currentEditingNote.title = title;
+                this.currentEditingNote.content = content;
+                this.currentEditingNote.tags = tags;
+                this.currentEditingNote.updatedAt = new Date().toISOString();
+                
+            } else {
+                // Crear nueva nota
+                const response = await fetch('http://localhost:3000/api/notes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        title,
+                        content,
+                        tags
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al crear la nota');
+                }
+
+                const result = await response.json();
+                
+                // Agregar la nueva nota al array local
+                const newNote = {
+                    id: result.data.note_id,
+                    title,
+                    content,
+                    tags,
+                    createdAt: result.data.created_at,
+                    updatedAt: result.data.updated_at
+                };
+                this.notes.unshift(newNote);
+            }
+
+            // Guardar en localStorage como respaldo
+            const userId = this.userData.id;
+            localStorage.setItem(`userNotes_${userId}`, JSON.stringify(this.notes));
+            
+            this.renderNotes();
+            this.closeNoteModal();
+            
+        } catch (error) {
+            console.error('Error al guardar la nota:', error);
+            alert(`Error al guardar la nota: ${error.message}`);
+        }
     }
 
     editNote(note) {
         this.openNoteModal(note);
+    }
+
+    async deleteNote(noteId) {
+        if (confirm('¿Estás seguro de que quieres eliminar esta nota? Esta acción no se puede deshacer.')) {
+            try {
+                const authToken = localStorage.getItem('authToken');
+                
+                const response = await fetch(`http://localhost:3000/api/notes/${noteId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al eliminar la nota');
+                }
+
+                // Eliminar la nota del array local
+                this.notes = this.notes.filter(note => note.id !== noteId);
+                
+                // Guardar en localStorage como respaldo
+                const userId = this.userData.id;
+                localStorage.setItem(`userNotes_${userId}`, JSON.stringify(this.notes));
+                
+                this.renderNotes();
+                console.log('Nota eliminada exitosamente');
+                
+            } catch (error) {
+                console.error('Error al eliminar la nota:', error);
+                alert(`Error al eliminar la nota: ${error.message}`);
+            }
+        }
     }
 
     openResourceModal(resource) {
@@ -1185,6 +1521,294 @@ class Dashboard {
         sessionStorage.clear();
         
         window.location.href = 'login.html';
+    }
+
+    async deleteAccount() {
+        if (!confirm('¿Estás completamente seguro de que quieres eliminar tu cuenta? Esta acción es irreversible y se perderán todos tus datos, notas y progreso.')) {
+            return;
+        }
+
+        if (!confirm('ÚLTIMA ADVERTENCIA: ¿Realmente quieres eliminar tu cuenta? Esta acción no se puede deshacer.')) {
+            return;
+        }
+
+        try {
+            const authToken = localStorage.getItem('authToken');
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            
+            // Llamar a la API para eliminar la cuenta
+            const response = await fetch(`http://localhost:3000/api/users/delete-account`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+                body: JSON.stringify({
+                    userId: userData.id,
+                    email: userData.email
+                })
+            });
+
+            if (response.ok) {
+                // Limpiar todos los datos del usuario
+                const userId = userData.id;
+                localStorage.removeItem(`userNotes_${userId}`);
+                localStorage.removeItem('userData');
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('refreshToken');
+                localStorage.removeItem('loginTimestamp');
+                sessionStorage.clear();
+                
+                alert('Tu cuenta ha sido eliminada exitosamente. Gracias por usar Vmind.');
+                window.location.href = 'index.html';
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error al eliminar la cuenta');
+            }
+            
+        } catch (error) {
+            console.error('Error deleting account:', error);
+            alert(`Error al eliminar la cuenta: ${error.message}`);
+        }
+    }
+
+    async loadUserTasksFromDatabase() {
+        try {
+            const authToken = localStorage.getItem('authToken');
+            const response = await fetch('http://localhost:3000/api/tasks/user/roadmap-tasks', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al cargar las tareas desde la base de datos');
+            }
+
+            const result = await response.json();
+            const userTasks = result.data;
+
+            // Sincronizar el estado de las tareas con la base de datos
+            this.syncTasksWithDatabase(userTasks);
+
+        } catch (error) {
+            console.error('Error al cargar tareas desde la base de datos:', error);
+            // Si hay error, usar el estado local como respaldo
+        }
+    }
+
+    syncTasksWithDatabase(userTasks) {
+        // Mapear las tareas de la base de datos a los planetas del roadmap
+        userTasks.forEach(dbTask => {
+            // Buscar en qué planeta está esta tarea basándose en el level_title
+            for (const planetId in this.pythonRoadmap) {
+                const planet = this.pythonRoadmap[planetId];
+                const matchingTask = planet.tasks.find(t => t.title === dbTask.title);
+                
+                if (matchingTask) {
+                    // Actualizar el estado de la tarea
+                    matchingTask.completed = dbTask.user_status === 'completed';
+                    
+                    // Si la tarea está completada, agregar los puntos al usuario
+                    if (matchingTask.completed && !matchingTask.wasCompletedBefore) {
+                        this.userData.points += matchingTask.xp;
+                        matchingTask.wasCompletedBefore = true;
+                    }
+                }
+            }
+        });
+
+        // Actualizar la UI con los datos sincronizados
+        this.updateUserInterface();
+        this.updateRoadmapProgress();
+    }
+
+    applySurveyPersonalization() {
+        const surveyData = localStorage.getItem('userSurveyData');
+        if (!surveyData) return;
+
+        try {
+            const survey = JSON.parse(surveyData);
+            console.log('Aplicando personalización basada en encuesta:', survey);
+
+            // Personalizar roadmap basado en el nivel de experiencia
+            this.personalizeRoadmapByExperience(survey.experience);
+            
+            // Personalizar roadmap basado en el área de interés
+            this.personalizeRoadmapByArea(survey.area);
+            
+            // Personalizar roadmap basado en el ritmo de aprendizaje
+            this.personalizeRoadmapByPace(survey.pace);
+            
+            // Actualizar la UI
+            this.renderRoadmap();
+            this.updateRoadmapProgress();
+            
+        } catch (error) {
+            console.error('Error al aplicar personalización:', error);
+        }
+    }
+
+    personalizeRoadmapByExperience(experience) {
+        const planetOrder = ['fundamentals', 'control-flow', 'data-structures', 'functions', 'oop', 'modules', 'exceptions', 'file-io', 'web', 'data-science'];
+        
+        switch (experience) {
+            case 'beginner':
+                // Para principiantes, solo el primer planeta está desbloqueado
+                this.pythonRoadmap.fundamentals.status = 'in-progress';
+                this.pythonRoadmap['control-flow'].status = 'locked';
+                break;
+                
+            case 'intermediate':
+                // Para intermedios, los primeros 3 planetas están desbloqueados
+                this.pythonRoadmap.fundamentals.status = 'completed';
+                this.pythonRoadmap['control-flow'].status = 'in-progress';
+                this.pythonRoadmap['data-structures'].status = 'in-progress';
+                break;
+                
+            case 'advanced':
+                // Para avanzados, los primeros 5 planetas están desbloqueados
+                this.pythonRoadmap.fundamentals.status = 'completed';
+                this.pythonRoadmap['control-flow'].status = 'completed';
+                this.pythonRoadmap['data-structures'].status = 'in-progress';
+                this.pythonRoadmap.functions.status = 'in-progress';
+                this.pythonRoadmap.oop.status = 'in-progress';
+                break;
+        }
+    }
+
+    personalizeRoadmapByArea(area) {
+        // Personalizar contenido basado en el área de interés
+        switch (area) {
+            case 'web':
+                // Enfocar en desarrollo web
+                this.pythonRoadmap.web.status = 'in-progress';
+                this.pythonRoadmap.web.description = 'Crea aplicaciones web modernas con Python';
+                break;
+                
+            case 'data':
+                // Enfocar en data science
+                this.pythonRoadmap['data-science'].status = 'in-progress';
+                this.pythonRoadmap['data-science'].description = 'Analiza y visualiza datos con Python';
+                break;
+                
+            case 'mobile':
+                // Enfocar en desarrollo móvil (aunque Python no es ideal para esto)
+                this.pythonRoadmap.web.description = 'Crea APIs para aplicaciones móviles';
+                break;
+                
+            case 'general':
+                // Mantener enfoque general
+                break;
+        }
+    }
+
+    personalizeRoadmapByPace(pace) {
+        // Ajustar la cantidad de tareas por planeta basado en el ritmo
+        const planetOrder = ['fundamentals', 'control-flow', 'data-structures', 'functions', 'oop', 'modules', 'exceptions', 'file-io', 'web', 'data-science'];
+        
+        planetOrder.forEach(planetId => {
+            const planet = this.pythonRoadmap[planetId];
+            
+            switch (pace) {
+                case 'fast':
+                    // Ritmo rápido: más tareas, más XP
+                    planet.tasks.forEach(task => {
+                        task.xp = Math.floor(task.xp * 1.5);
+                    });
+                    break;
+                    
+                case 'balanced':
+                    // Ritmo equilibrado: mantener valores por defecto
+                    break;
+                    
+                case 'relaxed':
+                    // Ritmo tranquilo: menos tareas, menos XP
+                    planet.tasks.forEach(task => {
+                        task.xp = Math.floor(task.xp * 0.8);
+                    });
+                    break;
+            }
+        });
+    }
+
+    retakeSurvey() {
+        if (confirm('¿Te gustaría volver a tomar la encuesta de caracterización? Esto actualizará tu roadmap personalizado.')) {
+            // Limpiar datos de la encuesta anterior
+            localStorage.removeItem('surveyCompleted');
+            localStorage.removeItem('userSurveyData');
+            
+            // Redirigir a la encuesta
+            window.location.href = 'survey.html';
+        }
+    }
+
+    getPersonalizedMessage(survey) {
+        const messages = {
+            beginner: {
+                employment: {
+                    text: "Cada línea de código te acerca más a tu primer trabajo en programación. ¡Tú puedes!",
+                    author: "- Tu roadmap personalizado"
+                },
+                hobby: {
+                    text: "La programación es como un juego donde tú creas las reglas. ¡Diviértete aprendiendo!",
+                    author: "- Tu roadmap personalizado"
+                },
+                entrepreneurship: {
+                    text: "Los mejores emprendedores tecnológicos empezaron con una línea de código. ¡Tú eres el siguiente!",
+                    author: "- Tu roadmap personalizado"
+                },
+                academic: {
+                    text: "El conocimiento es poder. Cada concepto que aprendas te hará más fuerte.",
+                    author: "- Tu roadmap personalizado"
+                }
+            },
+            intermediate: {
+                employment: {
+                    text: "Ya tienes una base sólida. Ahora es momento de especializarte y destacar.",
+                    author: "- Tu roadmap personalizado"
+                },
+                hobby: {
+                    text: "Con tu experiencia, puedes crear proyectos cada vez más interesantes.",
+                    author: "- Tu roadmap personalizado"
+                },
+                entrepreneurship: {
+                    text: "Tu conocimiento técnico es el cimiento perfecto para tu startup.",
+                    author: "- Tu roadmap personalizado"
+                },
+                academic: {
+                    text: "Estás construyendo una base sólida para la investigación y el desarrollo.",
+                    author: "- Tu roadmap personalizado"
+                }
+            },
+            advanced: {
+                employment: {
+                    text: "Eres un experto. Ahora es momento de liderar y enseñar a otros.",
+                    author: "- Tu roadmap personalizado"
+                },
+                hobby: {
+                    text: "Con tu nivel, puedes contribuir a proyectos open source y crear herramientas increíbles.",
+                    author: "- Tu roadmap personalizado"
+                },
+                entrepreneurship: {
+                    text: "Tu expertise técnico te da una ventaja competitiva enorme en el mercado.",
+                    author: "- Tu roadmap personalizado"
+                },
+                academic: {
+                    text: "Estás en la vanguardia del conocimiento. ¡Puedes innovar y descubrir!",
+                    author: "- Tu roadmap personalizado"
+                }
+            }
+        };
+
+        const experience = survey.experience || 'beginner';
+        const objective = survey.objective || 'hobby';
+        
+        return messages[experience][objective] || {
+            text: "Tu roadmap personalizado está listo para llevarte al siguiente nivel.",
+            author: "- V-Mind"
+        };
     }
 }
 

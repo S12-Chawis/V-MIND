@@ -1,0 +1,550 @@
+/* ===== ESTILOS PARA ENCUESTA DE CARACTERIZACIÓN ===== */
+/* Siguiendo la estética de index.html y login.html */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Colores principales Galaxy-themed */
+    --primary: #5D3FD3;
+    --primary-dark: #4A32A8;
+    --primary-light: #7B5FE8;
+    --secondary: #3AB0FF;
+    --accent: #641ACF;
+    --accent-pink: #FF6EC7;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    
+    /* Colores de fondo espacial */
+    --bg-dark: #0A0A0F;
+    --bg-space: #0F0F1A;
+    --bg-nebula: #1A0B2E;
+    --bg-card: rgba(255, 255, 255, 0.08);
+    --bg-card-hover: rgba(255, 255, 255, 0.12);
+    
+    /* Colores de texto */
+    --text-primary: #ffffff;
+    --text-secondary: #E2E8F0;
+    --text-muted: #94A3B8;
+    
+    /* Gradientes Galaxy-themed */
+    --gradient-primary: linear-gradient(135deg, #5D3FD3 0%, #641ACF 50%, #FF6EC7 100%);
+    --gradient-secondary: linear-gradient(135deg, #3AB0FF 0%, #5D3FD3 50%, #641ACF 100%);
+    --gradient-hero: linear-gradient(135deg, #0A0A0F 0%, #1A0B2E 50%, #0A0A0F 100%);
+    --gradient-nebula: linear-gradient(135deg, #1A0B2E 0%, #2D1B69 50%, #1A0B2E 100%);
+    --gradient-space: linear-gradient(135deg, #0F0F1A 0%, #1A0B2E 100%);
+    
+    /* Sombras suaves */
+    --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.15);
+    --shadow-glow: 0 0 25px rgba(93, 63, 211, 0.4);
+    --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --shadow-neon: 0 0 20px rgba(255, 110, 199, 0.3);
+    
+    /* Bordes redondeados */
+    --border-radius: 16px;
+    --border-radius-lg: 24px;
+    --border-radius-xl: 36px;
+    
+    /* Transiciones */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+html {
+    background: var(--bg-dark);
+    overflow-x: hidden;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: transparent;
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+}
+
+/* Fondo espacial con Canvas */
+.stars-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background: var(--gradient-hero);
+}
+
+.stars-bg canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Efectos de partículas y nebulosas */
+.nebula-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(93, 63, 211, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(58, 176, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(255, 110, 199, 0.1) 0%, transparent 50%);
+}
+
+/* Overlay para mejorar legibilidad */
+.content-overlay {
+    position: relative;
+    z-index: 1;
+}
+
+.content-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 10, 15, 0.3);
+    z-index: -1;
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+}
+
+/* Contenedor principal de la encuesta */
+.survey-container {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    padding: 3rem 2.5rem;
+    max-width: 900px;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+    overflow: hidden;
+}
+
+/* Efecto de glow en el contenedor */
+.survey-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-primary);
+    opacity: 0.02;
+    z-index: -1;
+    border-radius: inherit;
+}
+
+/* Header de la encuesta */
+.survey-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.survey-header::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+}
+
+.survey-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+}
+
+.survey-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+/* Formulario de la encuesta */
+.survey-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Grupos de preguntas */
+.question-group {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.question-group::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    transition: left 0.5s ease;
+}
+
+.question-group:hover::before {
+    left: 100%;
+}
+
+.question-group:hover {
+    border-color: rgba(93, 63, 211, 0.5);
+    box-shadow: 0 10px 30px rgba(93, 63, 211, 0.2);
+    transform: translateY(-2px);
+}
+
+.question-group h3 {
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    position: relative;
+}
+
+.question-group h3::before {
+    content: '🌟';
+    position: absolute;
+    left: -35px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+/* Opciones de respuesta */
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.option {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(93, 63, 211, 0.1), rgba(58, 176, 255, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.option:hover::before {
+    opacity: 1;
+}
+
+.option:hover {
+    border-color: rgba(93, 63, 211, 0.6);
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(93, 63, 211, 0.2);
+}
+
+.option input[type="radio"] {
+    margin-top: 3px;
+    transform: scale(1.2);
+    accent-color: var(--primary);
+}
+
+.option input[type="checkbox"] {
+    margin-top: 3px;
+    transform: scale(1.2);
+    accent-color: var(--primary);
+}
+
+.option input[type="checkbox"]:checked + .option-text strong {
+    color: var(--primary);
+}
+
+.option input[type="checkbox"]:checked {
+    border-color: var(--primary);
+}
+
+.option-text {
+    flex: 1;
+    position: relative;
+    z-index: 2;
+}
+
+.option-text strong {
+    display: block;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.option-text small {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.option input[type="radio"]:checked + .option-text strong {
+    color: var(--primary);
+}
+
+.option.selected {
+    border-color: var(--primary);
+    background: rgba(93, 63, 211, 0.1);
+}
+
+/* Acciones del formulario */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.btn-submit {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    box-shadow: var(--shadow-glow);
+    position: relative;
+    overflow: hidden;
+    min-width: 200px;
+}
+
+.btn-submit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-submit:hover::before {
+    left: 100%;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(93, 63, 211, 0.4);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+.btn-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Botón de cancelar */
+.btn-cancel {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1rem 2rem;
+    border-radius: var(--border-radius);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 200px;
+}
+
+.btn-cancel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-cancel:hover::before {
+    left: 100%;
+}
+
+.btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+}
+
+.btn-cancel:active {
+    transform: translateY(0);
+}
+
+/* Mensaje de éxito */
+.success-message {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--text-primary);
+}
+
+.success-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-20px); }
+    60% { transform: translateY(-10px); }
+}
+
+.success-message h2 {
+    color: var(--success);
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+
+.success-message p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1.5rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.redirect-text {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .survey-container {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+    }
+
+    .survey-header h1 {
+        font-size: 2rem;
+    }
+
+    .question-group {
+        padding: 1.5rem;
+    }
+
+    .option {
+        padding: 1.25rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-submit,
+    .btn-cancel {
+        padding: 0.875rem 2.5rem;
+        font-size: 1rem;
+        min-width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .survey-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .survey-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .question-group h3 {
+        font-size: 1.1rem;
+    }
+
+    .option-text strong {
+        font-size: 1rem;
+    }
+
+    .option-text small {
+        font-size: 0.875rem;
+    }
+}

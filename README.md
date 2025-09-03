@@ -1,149 +1,281 @@
-# V-Mind
+# V-Mind - AI Learning Copilot 🚀
 
-**V-Mind** is a next-generation knowledge management and productivity platform, designed for interstellar teams and organizations seeking to organize, visualize, and collaborate on information across the galaxy. Built with scalability, modularity, and user experience in mind, V-Mind empowers users to map their ideas, tasks, and resources as if navigating a star system.
+A gamified learning platform that personalizes your learning journey through interactive roadmaps, progress tracking, and AI-powered recommendations.
 
----
+## ✨ Features
 
-## 🚀 Galactic Overview
+- **Personalized Learning Paths**: Dynamic roadmaps based on your experience level and interests
+- **Interactive Planet System**: Learn through an engaging space-themed interface
+- **Progress Tracking**: Real-time XP system and achievement tracking
+- **Rich Notes System**: Create and organize your learning notes with rich text editing
+- **Resource Management**: Access curated learning materials for each topic
+- **User Characterization Survey**: Get personalized recommendations through an intelligent survey
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
 
-- **Project Name:** V-Mind  
-- **Purpose:** Knowledge management, mind mapping, and productivity tool  
-- **Theme:** Galactic/space-inspired UI and terminology  
-- **Tech Stack:**  
-  - Frontend: HTML, CSS, JavaScript (Vanilla)  
-  - Bundler/Dev Server: Vite  
-  - Backend: Node.js + Express  
-  - Database: MySQL  
-  - Styling: Custom CSS  
-  - Authentication: JWT (or similar, if applicable)  
-- **Status:** In active development  
+## 🏗️ Project Structure
 
----
+```
+V-Mind/
+├── backend/                 # Node.js backend server
+│   ├── config/             # Database and server configuration
+│   ├── controllers/        # API endpoint controllers
+│   ├── models/            # Database models and queries
+│   ├── routes/            # API route definitions
+│   ├── middleware/        # Authentication and validation middleware
+│   ├── scripts/           # Database setup and utility scripts
+│   └── server.js          # Main server entry point
+├── frontend/               # Frontend application
+│   ├── css/               # Stylesheets
+│   ├── js/                # JavaScript modules
+│   ├── assets/            # Images and UI elements
+│   ├── index.html         # Landing page
+│   ├── login.html         # User authentication
+│   ├── register.html      # User registration
+│   ├── survey.html        # Learning characterization survey
+│   └── dashboard.html     # Main learning dashboard
+├── package.json            # Node.js dependencies
+└── README.md              # This file
+```
 
-## 🌌 Features
-
-- **Mind Mapping:** Create, edit, and visualize interconnected ideas as constellations.  
-- **Task Management:** Assign, track, and complete tasks (missions) within your knowledge galaxy.  
-- **Collaboration:** Real-time collaboration for teams across the universe.  
-- **Search & Filter:** Quickly locate stars (notes, tasks, resources) in your knowledge system.  
-- **Customizable Views:** Switch between different galaxy map layouts and perspectives.  
-- **User Authentication:** Secure access for crew members (users).  
-- **Responsive Design:** Optimized for all devices, from planetary stations to mobile shuttles.  
-
----
-
-## 🛰️ Installation
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- **Node.js** (version 16.x or higher recommended)  
-- **npm** (comes with Node.js)  
-- **MySQL** (local or remote instance)  
-- (Optional) **Git** for version control  
+- **Node.js** (v16 or higher)
+- **MySQL** (v8.0 or higher)
+- **Git**
 
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/AlejaQuiroga545/V-Mind.git
-   cd V-Mind
-   ```
-1. **Install dependencies**
- ```bash
-   npm install
-   ```
+### 1. Clone the Repository
 
-3. **Configure Environment Variables**
-   - Copy `.env.example` to `.env` and update with your galactic credentials.
-   - Example:
-     ```
-     # .env
-      DB_HOST=localhost
-      DB_USER=root
-      DB_PASSWORD=your_password
-      DB_NAME=vmind
-      JWT_SECRET=your_super_secret_key
-      PORT=3000
-     ```
-
-5. **Run the Development Server**
-   ```bash
-   npm run dev
-   ```
-
-6. **Access the Platform**
-   - Open your browser and navigate to `http://localhost:3000`
-
----
-
-## 🪐 Project Structure
-
-```
-vmind_v2-main/
-│
-├── public/             # Static assets (images, icons, etc.)
-├── src/                # Source code
-│   ├── components/     # Reusable UI components (Stars, Planets, etc.)
-│   ├── pages/          # Application pages (Galaxies)
-│   ├── services/       # API and utility services
-│   ├── store/          # State management
-│   └── styles/         # Styling files
-├── .env.example        # Example environment variables
-├── package.json        # Project metadata and scripts
-└── README.md           # This file
+```bash
+git clone <your-repository-url>
+cd V-Mind
 ```
 
----
+### 2. Install Dependencies
 
-## 🌠 Usage
+```bash
+npm install
+```
 
-- **Create a New Map:** Start a new galaxy and add stars (nodes) to represent ideas or tasks.
-- **Connect Ideas:** Draw connections (wormholes) between stars to visualize relationships.
-- **Assign Tasks:** Designate missions to crew members and track progress.
-- **Collaborate:** Invite others to your galaxy and work together in real-time.
+### 3. Database Setup
 
----
+#### Create MySQL Database
+```sql
+CREATE DATABASE vmind_db;
+CREATE USER 'vmind_user'@'localhost' IDENTIFIED BY 'your_password';
+GRANT ALL PRIVILEGES ON vmind_db.* TO 'vmind_user'@'localhost';
+FLUSH PRIVILEGES;
+```
 
-## 🛠️ Troubleshooting
+#### Configure Environment Variables
+```bash
+# Copy the example environment file
+cp backend/env.example backend/.env
 
-- **Port Already in Use:**  
-  If you see an error about port 3000, either stop the process using it or change the `PORT` in your `.env` file.
+# Edit the .env file with your database credentials
+nano backend/.env
+```
 
-- **Database Connection Issues:**  
-  Ensure MongoDB is running and the `MONGODB_URI` is correct.
+Example `.env` configuration:
+```env
+DB_HOST=localhost
+DB_USER=vmind_user
+DB_PASSWORD=your_password
+DB_NAME=vmind_db
+DB_PORT=3306
+JWT_SECRET=your_jwt_secret_key_here
+CORS_ORIGIN=http://localhost:8000
+PORT=3000
+```
 
-- **Dependency Issues:**  
-  Run `npm install` again if you encounter missing modules.
+#### Initialize Database Schema
+```bash
+# Run the database setup script
+cd backend
+node scripts/setup-database.js
+```
 
-- **Environment Variables Not Loaded:**  
-  Double-check your `.env` file and restart the server after changes.
+### 4. Start the Backend Server
 
----
+```bash
+# From the project root
+npm start
 
-## 🛸 Contributing
+# Or manually start the backend
+cd backend
+node server.js
+```
 
-We welcome contributions from all corners of the galaxy! Please follow these steps:
+The backend will start on `http://localhost:3000`
+
+### 5. Start the Frontend
+
+```bash
+# Open a new terminal and navigate to frontend
+cd frontend
+
+# Start a local HTTP server (Python 3)
+python -m http.server 8000
+
+# Or use Node.js http-server if you have it installed
+npx http-server -p 8000
+```
+
+The frontend will be available at `http://localhost:8000`
+
+## 🔧 Configuration
+
+### Backend Configuration
+
+The backend server can be configured through environment variables:
+
+- `PORT`: Server port (default: 3000)
+- `DB_HOST`: MySQL host (default: localhost)
+- `DB_USER`: MySQL username
+- `DB_PASSWORD`: MySQL password
+- `DB_NAME`: Database name
+- `JWT_SECRET`: Secret key for JWT tokens
+- `CORS_ORIGIN`: Allowed origin for CORS
+
+### Frontend Configuration
+
+API endpoints are configured in `frontend/js/api-config.js`:
+
+```javascript
+const API_BASE_URL = 'http://localhost:3000/api';
+```
+
+## 📱 Usage
+
+### 1. User Registration
+- Navigate to the registration page
+- Fill in your details and preferences
+- Complete the learning characterization survey
+- Get redirected to login
+
+### 2. User Login
+- Use your registered email/username and password
+- Access your personalized dashboard
+
+### 3. Learning Dashboard
+- Explore your personalized learning roadmap
+- Complete tasks to earn XP
+- Take notes and organize resources
+- Track your progress through interactive charts
+
+### 4. Survey System
+- New users complete a characterization survey
+- Survey results determine your learning path
+- Roadmap content adapts to your preferences
+
+## 🗄️ Database Schema
+
+The application uses the following main tables:
+
+- `users`: User accounts and profiles
+- `user_surveys`: Survey responses and preferences
+- `user_tasks`: Task completion tracking
+- `user_notes`: User-created learning notes
+- `user_resources`: User-saved learning resources
+
+## 🔒 Security Features
+
+- **JWT Authentication**: Secure token-based authentication
+- **Password Hashing**: Bcrypt password encryption
+- **CORS Protection**: Configurable cross-origin resource sharing
+- **Input Validation**: Server-side validation for all inputs
+- **SQL Injection Protection**: Parameterized queries
+
+## 🧪 Testing
+
+### Backend Testing
+```bash
+cd backend
+npm test
+```
+
+### Frontend Testing
+```bash
+cd frontend
+# Open in browser and test functionality manually
+# Or use browser developer tools for debugging
+```
+
+## 🚀 Deployment
+
+### Production Environment
+
+1. **Set Production Environment Variables**
+   ```bash
+   NODE_ENV=production
+   DB_HOST=your_production_db_host
+   JWT_SECRET=your_production_jwt_secret
+   ```
+
+2. **Build Frontend** (if using a build tool)
+   ```bash
+   cd frontend
+   npm run build
+   ```
+
+3. **Use PM2 for Process Management**
+   ```bash
+   npm install -g pm2
+   pm2 start backend/server.js --name "vmind-backend"
+   pm2 startup
+   pm2 save
+   ```
+
+### Docker Deployment
+
+```dockerfile
+# Example Dockerfile for backend
+FROM node:16-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create a new branch: `git checkout -b feature/your-feature`
-3. Commit your changes: `git commit -m 'Add your feature'`
-4. Push to your branch: `git push origin feature/your-feature`
-5. Open a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+If you encounter any issues:
+
+1. Check the [Issues](https://github.com/your-repo/V-Mind/issues) page
+2. Create a new issue with detailed information
+3. Include your environment details and error logs
+
+## 🔄 Updates and Maintenance
+
+- **Regular Updates**: Check for Node.js and dependency updates
+- **Security Patches**: Monitor security advisories for dependencies
+- **Database Maintenance**: Regular backups and optimization
+- **Performance Monitoring**: Monitor server performance and user experience
+
+## 📊 Performance Considerations
+
+- **Database Indexing**: Ensure proper indexes on frequently queried fields
+- **Caching**: Implement Redis caching for frequently accessed data
+- **CDN**: Use CDN for static assets in production
+- **Load Balancing**: Consider load balancing for high-traffic scenarios
 
 ---
 
-## 🌍 License
+**Happy Learning! 🎓✨**
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
-## 📡 Contact
-
-For questions, suggestions, or to join our crew, contact:
-
-- **Project Lead:** Alejandra Quiroga - Scrum Master
-- **Email:** alejandraquirogag802@gmail.com
-- **Issues:** [GitHub Issues](https://github.com/yourusername/vmind_v2/issues)
-
----
-
-> *"Chart your ideas. Connect your universe. VMind v2 — Your knowledge, mapped among the stars."*
+Built with ❤️ by the V-Mind Team
