@@ -48,7 +48,7 @@ V-Mind/
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/S12-Chawis/V-MIND.git
 cd V-Mind
 ```
 
