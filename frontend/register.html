@@ -103,21 +103,7 @@
                     <span class="error-message" id="passwordError">This field is required</span>
                 </div>
 
-                <!-- Age field -->
-                <div class="form-group" id="ageGroup">
-                    <label for="age" class="form-label">Age</label>
-                    <input 
-                        type="number" 
-                        id="age" 
-                        name="age" 
-                        class="login-input"
-                        placeholder="Your age"
-                        min="13"
-                        max="120"
-                        required
-                    >
-                    <span class="error-message" id="ageError">This field is required</span>
-                </div>
+
 
                 <!-- Registration button -->
                 <button type="submit" class="login-button glow-effect" id="registerButton">
@@ -139,143 +125,54 @@
     </div>
 
     <!-- Modular scripts -->
-    <script src="js/test-users.js"></script>
     <script src="js/login-space-warp.js"></script>
-    <script src="js/api-config.js"></script>
     <script>
-        // Registration form validation and submission
-        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        // Simple registration form - redirects to wizard
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Get form values
+            // Get form data
             const formData = {
-                name: document.getElementById('name').value.trim(),
+                user_name: document.getElementById('name').value.trim(),
                 email: document.getElementById('email').value.trim(),
                 phone: document.getElementById('phone').value.trim(),
-                password: document.getElementById('password').value,
-                age: parseInt(document.getElementById('age').value)
+                passwords: document.getElementById('password').value
             };
-
-            // Validations
-            let isValid = true;
             
-            // Clear previous errors
-            document.querySelectorAll('.form-group').forEach(group => {
-                group.classList.remove('error');
-            });
-            
-            // Validate name
-            if (formData.name.length < 2) {
-                showError('nameGroup', 'nameError', 'Name must be at least 2 characters long');
-                isValid = false;
+            // Validate required fields
+            if (!formData.user_name || !formData.email || !formData.passwords) {
+                showError('Please fill in all required fields');
+                return;
             }
             
-            // Validate email
+            // Validate email format
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(formData.email)) {
-                showError('emailGroup', 'emailError', 'Enter a valid email address');
-                isValid = false;
+                showError('Please enter a valid email address');
+                return;
             }
             
-            // Validate password
-            if (formData.password.length < 6) {
-                showError('passwordGroup', 'passwordError', 'Password must be at least 6 characters long');
-                isValid = false;
+            // Validate password length
+            if (formData.passwords.length < 6) {
+                showError('Password must be at least 6 characters');
+                return;
             }
             
-            // Validate phone (optional but if entered must be valid)
-            if (formData.phone && !/^[0-9]{10,15}$/.test(formData.phone.replace(/\s/g, ''))) {
-                showError('phoneGroup', 'phoneError', 'Phone must have between 10 and 15 digits');
-                isValid = false;
-            }
-            
-            // Validate age
-            if (formData.age < 13 || formData.age > 120) {
-                showError('ageGroup', 'ageError', 'Age must be between 13 and 120 years');
-                isValid = false;
-            }
-            
-            if (!isValid) return;
-            
-            // Show loading state
-            const submitButton = document.getElementById('registerButton');
-            const originalText = submitButton.querySelector('.button-text').textContent;
-            submitButton.classList.add('loading');
-            submitButton.disabled = true;
-            
-            try {
-                // Call the real backend API
-                const response = await fetch('http://localhost:3000/api/auth/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        user_name: formData.name,
-                        email: formData.email,
-                        phone: formData.phone || null,
-                        passwords: formData.password,
-                        objetive: `User of ${formData.age} years`,
-                        preferred_language: 'en'
-                    })
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    console.log('User registered successfully:', result.data.user);
-                    
-                    // Temporarily save user data to use after the survey
-                    const tempUserData = {
-                        id: result.data.user.id,
-                        username: result.data.user.user_name,
-                        email: result.data.user.email,
-                        phone: result.data.user.phone,
-                        objetivo: result.data.user.objetive,
-                        preferred_language: result.data.user.preferred_language
-                    };
-                    localStorage.setItem('tempUserData', JSON.stringify(tempUserData));
-                    
-                    // Show success message
-                    showSuccess('Account created successfully! Redirecting to survey...');
-                    
-                    // Redirect after 2 seconds
-                    setTimeout(() => {
-                        window.location.href = 'survey.html';
-                    }, 2000);
-                } else {
-                    throw new Error(result.message || 'Error creating account');
-                }
-                
-            } catch (error) {
-                console.error('Registration error:', error);
-                showError('emailGroup', 'emailError', 'Error creating account. Try again.');
-                
-                // Restore button
-                submitButton.classList.remove('loading');
-                submitButton.disabled = false;
-            }
+            // Store data temporarily and redirect to wizard
+            localStorage.setItem('tempRegistrationData', JSON.stringify(formData));
+            window.location.href = 'register-wizard.html';
         });
         
-        function showError(groupId, errorId, message) {
-            const group = document.getElementById(groupId);
-            const errorElement = document.getElementById(errorId);
-            
-            group.classList.add('error');
-            errorElement.textContent = message;
-        }
-        
-        // Function to show success messages
-        function showSuccess(message) {
-            // Create a success toast
-            const toast = document.createElement('div');
-            toast.className = 'success-toast';
-            toast.textContent = message;
-            toast.style.cssText = `
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-toast';
+            errorDiv.textContent = message;
+            errorDiv.style.cssText = `
                 position: fixed;
                 top: 20px;
                 right: 20px;
-                background: #10b981;
+                background: #ef4444;
                 color: white;
                 padding: 1rem 1.5rem;
                 border-radius: 8px;
@@ -283,19 +180,17 @@
                 animation: slideIn 0.3s ease;
             `;
             
-            document.body.appendChild(toast);
+            document.body.appendChild(errorDiv);
             
-            // Remove after 3 seconds
             setTimeout(() => {
-                toast.remove();
+                errorDiv.remove();
             }, 3000);
         }
         
-        // Hover effects on inputs (same as login)
+        // Hover effects on inputs
         document.querySelectorAll('.login-input').forEach(input => {
             input.addEventListener('focus', function() {
                 this.parentElement.style.transform = 'scale(1.02)';
-                // Clear error on focus
                 this.parentElement.classList.remove('error');
             });
             
@@ -303,7 +198,6 @@
                 this.parentElement.style.transform = 'scale(1)';
             });
             
-            // Clear error on input
             input.addEventListener('input', function() {
                 this.parentElement.classList.remove('error');
             });

@@ -100,7 +100,7 @@ class Roadmap {
     const values = [
       updateData.title,
       updateData.roadmap_description,
-      updateData.topic,
+      updateData.topic, 
       updateData.difficulty,
       updateData.estimated_time,
       roadmapId

@@ -1,8 +1,5 @@
--- Vmind Database Schema
---Personalized learning platform
-
-CREATE DATABASE IF NOT EXISTS v_mind;
-USE v_mind;
+CREATE DATABASE IF NOT EXISTS v_mind2;
+USE v_mind2;
 
 -- User table
 CREATE TABLE users (
@@ -12,10 +9,10 @@ CREATE TABLE users (
     phone VARCHAR(20),
     passwords VARCHAR(255) NOT NULL,
     rol ENUM('admin', 'user') DEFAULT 'user',
-    objetive TEXT,
+    objective TEXT,
     creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     last_connection DATETIME NULL,
-    current_level INT DEFAULT 0,
+    current_level varchar(100) DEFAULT 'beginner',
     preferred_language VARCHAR(10) DEFAULT 'es'
 );
 

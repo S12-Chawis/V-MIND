@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Registration - Vmind | Your Learning Journey</title>
+    
+    <!-- Modular styles -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/space-background.css">
+    <link rel="stylesheet" href="css/wizard.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Space background -->
+    <div class="stars-bg">
+        <canvas id="space"></canvas>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="wizard-navbar">
+        <div class="wizard-nav-container">
+            <a href="index.html" class="wizard-nav-logo">Vmind</a>
+            <a href="register.html" class="back-link">
+                <span>←</span>
+                <span>Back to registration</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main wizard container -->
+    <div class="wizard-container">
+        <div class="wizard-card glass-effect">
+            <!-- Progress indicator -->
+            <div class="wizard-progress">
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <span class="step-text" id="stepText">Step 1 of 3</span>
+            </div>
+
+            <!-- Wizard content -->
+            <div id="wizardContent" class="wizard-content">
+                <!-- Content will be rendered by JavaScript -->
+            </div>
+
+            <!-- Navigation buttons -->
+            <div class="wizard-navigation">
+                <button id="backBtn" class="btn-back" style="display: none;">Back</button>
+                <button id="nextBtn" class="btn-next">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading spinner -->
+    <div class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+        <p>Creating your account...</p>
+    </div>
+
+    <!-- Success message -->
+    <div class="success-message" style="display: none;">
+        <div class="success-icon">✓</div>
+        <h2>Account Created Successfully!</h2>
+        <p>Redirecting to learning path survey...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/space-background.js"></script>
+    <script src="js/register-wizard.js"></script>
+</body>
+</html>

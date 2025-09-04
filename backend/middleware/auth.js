@@ -3,8 +3,10 @@ const User = require('../models/User');
 
 const auth = async (req, res, next) => {
   try {
+    // Extract token from header and remove 'Bearer ' prefix
     const token = req.header('Authorization')?.replace('Bearer ', '');
     
+     // Verify a token is provided
     if (!token) {
       return res.status(401).json({ 
         success: false, 
@@ -12,7 +14,10 @@ const auth = async (req, res, next) => {
       });
     }
 
+    // Verify token is valid
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Find user by id in database
     const user = await User.findById(decoded.userId);
     
     if (!user) {
@@ -22,9 +27,13 @@ const auth = async (req, res, next) => {
       });
     }
 
+    // Add user to request object
     req.user = user;
+
+    // Continue to the next middleware
     next();
   } catch (error) {
+    // Handle token errors
     if (error.name === 'JsonWebTokenError') {
       return res.status(401).json({ 
         success: false, 

@@ -1,15 +1,13 @@
 const { pool } = require('../config/database');
 const { v4: uuidv4 } = require('uuid');
-const bcrypt = require('bcryptjs');
 
 class User {
   static async create(userData) {
     const userId = uuidv4();
-    const hashedPassword = await bcrypt.hash(userData.passwords, 10);
     
     const query = `
-      INSERT INTO users (user_id, user_name, email, phone, passwords, rol, objetive, preferred_language)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO users (user_id, user_name, email, phone, passwords, rol, objective, preferred_language, current_level, creation_date)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
     `;
     
     const values = [
@@ -17,15 +15,16 @@ class User {
       userData.user_name,
       userData.email,
       userData.phone,
-      hashedPassword,
+      userData.passwords, // Already hashed in controller
       userData.rol || 'user',
-      userData.objetive,
-      userData.preferred_language
+      userData.objective,
+      userData.preferred_language,
+      userData.current_level || 'beginner'
     ];
 
     try {
       const [result] = await pool.execute(query, values);
-      return { userId, ...userData, passwords: undefined };
+      return { user_id: userId, ...userData };
     } catch (error) {
       throw new Error(`Error creating user: ${error.message}`);
     }
@@ -85,6 +84,7 @@ class User {
   }
 
   static async comparePassword(password, hashedPassword) {
+    const bcrypt = require('bcryptjs');
     return await bcrypt.compare(password, hashedPassword);
   }
 }

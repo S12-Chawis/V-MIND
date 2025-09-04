@@ -12,22 +12,29 @@
     "test:db": "node test-database.js",
     "test:api": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["learning", "platform", "api", "nodejs", "express"],
+  "keywords": [
+    "learning",
+    "platform",
+    "api",
+    "nodejs",
+    "express"
+  ],
   "author": "Your Name",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
-    "mysql2": "^3.6.5",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.2",
-    "uuid": "^9.0.1",
-    "helmet": "^7.1.0",
+    "express": "^4.18.2",
     "express-rate-limit": "^7.1.5",
-    "node-fetch": "^2.7.0"
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.6.5",
+    "node-fetch": "^2.7.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "nodemon": "^3.0.2"
   }
 }

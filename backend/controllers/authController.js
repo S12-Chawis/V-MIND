@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const bcrypt = require('bcryptjs');
+require('dotenv').config();
 
 const generateToken = (userId) => {
   if (!process.env.JWT_SECRET) {
@@ -12,44 +14,44 @@ const generateToken = (userId) => {
 
 const register = async (req, res) => {
   try {
-    const { user_name, email, phone, passwords, objetive, preferred_language } = req.body;
-
+    const { user_name, email, phone, passwords, objective, preferred_language } = req.body;
+    
     // Validate required fields
     if (!user_name || !email || !passwords) {
-      return res.status(400).json({
-        success: false,
-        message: 'Name, email and password are required'
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Missing required fields' 
       });
     }
-
-    // Check if user already exists
-    const existingUser = await User.findByEmail(email);
-    if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: 'User with this email already exists'
-      });
-    }
-
-    // Create new user
+    
+    // Hash password
+    const hashedPassword = await bcrypt.hash(passwords, 10);
+    
+    // Prepare user data for database
     const userData = {
       user_name,
       email,
-      phone,
-      passwords,
-      objetive,
-      preferred_language: preferred_language || 'es'
+      phone: phone || null,
+      passwords: hashedPassword,
+      objective: objective || null,
+      preferred_language: preferred_language || 'en',
+      current_level: 'beginner',
+      rol: 'user'
     };
-
+    
+    // Create user in database
     const newUser = await User.create(userData);
-    const token = generateToken(newUser.userId);
-
+    
+    // Generate JWT token
+    const token = generateToken(newUser.user_id);
+    
+    // Return success response
     res.status(201).json({
       success: true,
       message: 'User registered successfully',
       data: {
         user: {
-          user_id: newUser.userId,
+          user_id: newUser.user_id,
           user_name: newUser.user_name,
           email: newUser.email,
           rol: newUser.rol
@@ -57,13 +59,12 @@ const register = async (req, res) => {
         token
       }
     });
-
+    
   } catch (error) {
     console.error('Registration error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Error registering user',
-      error: error.message
+    res.status(500).json({ 
+      success: false, 
+      message: 'Internal server error' 
     });
   }
 };
