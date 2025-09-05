@@ -62,6 +62,9 @@ app.use('/api/users', userRoutes);
 app.use('/api/roadmaps', roadmapRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/notes', noteRoutes);
+app.get('/ping', (req, res) => {
+  res.json({success: true, message: 'pong'})
+})
 
 // 404 handler
 app.use('*', (req, res) => {

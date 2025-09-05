@@ -18,23 +18,23 @@ const { auth } = require('../middleware/auth');
 router.use(auth);
 
 // Interests
-router.get('/interests', getUserInterests);
-router.put('/interests', updateUserInterest);
+router.get('/interests', auth, getUserInterests);
+router.put('/interests', auth, updateUserInterest);
 
 // Notes
-router.get('/notes', getUserNotes);
-router.post('/notes', createNote);
-router.put('/notes/:noteId', updateNote);
-router.delete('/notes/:noteId', deleteNote);
+router.get('/notes', auth, getUserNotes);
+router.post('/notes', auth, createNote);
+router.put('/notes/:noteId', auth, updateNote);
+router.delete('/notes/:noteId', auth, deleteNote);
 
 // Resources
-router.get('/resources', getUserResources);
-router.post('/resources', saveResource);
+router.get('/resources', auth, getUserResources);
+router.post('/resources', auth, saveResource);
 
 // Stats
-router.get('/stats', getUserStats);
+router.get('/stats', auth, getUserStats);
 
 // Account management
-router.delete('/delete-account', deleteAccount);
+router.delete('/delete-account', auth, deleteAccount);
 
 module.exports = router;

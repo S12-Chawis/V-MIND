@@ -1,26 +1,3 @@
-/**
- * V-Mind API Configuration and Client
- * 
- * This file provides a centralized configuration for all API endpoints and a robust
- * HTTP client for making authenticated requests to the backend server.
- * 
- * Features:
- * - Environment-aware base URL detection (local, staging, production)
- * - Automatic JWT token management for authenticated requests
- * - Comprehensive error handling with custom error types
- * - Centralized endpoint configuration
- * - Request/response interceptors for consistent error handling
- * 
- * @author V-Mind Team
- * @version 2.0.0
- */
-
-// ===== API CONFIGURATION =====
-
-/**
- * API Configuration Class
- * Manages API endpoints, base URLs, and default headers for different environments
- */
 class ApiConfig {
     constructor() {
         // Base API configuration
@@ -31,19 +8,12 @@ class ApiConfig {
             // Authentication endpoints
             login: '/api/auth/login',
             register: '/api/auth/register',
-            logout: '/api/auth/logout',
-            refresh: '/api/auth/refresh',
-            forgotPassword: '/api/auth/forgot-password',
-            resetPassword: '/api/auth/reset-password',
             
             // User management endpoints
             profile: '/api/user/profile',
             updateProfile: '/api/user/profile',
-            changePassword: '/api/user/change-password',
             
             // Dashboard and learning endpoints
-            dashboard: '/api/dashboard/data',
-            progress: '/api/user/progress',
             roadmaps: '/api/roadmaps',
         };
         
@@ -54,10 +24,6 @@ class ApiConfig {
         };
     }
 
-    /**
-     * Automatically detect the appropriate base URL based on current environment
-     * @returns {string} Base URL for API requests
-     */
     getBaseURL() {
         const hostname = window.location.hostname;
         
@@ -73,19 +39,12 @@ class ApiConfig {
         }
     }
 
-    /**
-     * Build full URL for a specific endpoint
-     * @param {string} endpoint - Endpoint key from this.endpoints
-     * @returns {string} Complete URL for the endpoint
-     */
+    // build full url for a specific endpoint
     getFullURL(endpoint) {
         return this.baseURL + this.endpoints[endpoint];
     }
 
-    /**
-     * Get headers with authentication token if available
-     * @returns {Object} Headers object with optional Authorization header
-     */
+    // get headers with authentication token if available
     getAuthHeaders() {
         const token = localStorage.getItem('authToken');
         return {
@@ -95,28 +54,17 @@ class ApiConfig {
     }
 }
 
-// ===== API CLIENT CLASS =====
-
-/**
- * HTTP Client for making API requests
- * Handles authentication, error handling, and request/response processing
- */
+// api client class
 class ApiClient {
     constructor() {
         this.config = new ApiConfig();
     }
 
-    /**
-     * Make HTTP request to API endpoint
-     * @param {string} endpoint - Endpoint key from config
-     * @param {Object} options - Request options (method, body, headers, etc.)
-     * @returns {Promise<Object>} Parsed response data
-     * @throws {ApiError} When request fails
-     */
+    // make http request to api endpoint
     async makeRequest(endpoint, options = {}) {
         const url = this.config.getFullURL(endpoint);
         
-        // Determine headers based on authentication requirement
+        // determine headers based on authentication requirement
         const headers = options.requireAuth ? 
             this.config.getAuthHeaders() : 
             this.config.defaultHeaders;
@@ -130,7 +78,7 @@ class ApiClient {
             ...options
         };
 
-        // Add request body if provided
+        // add request body if provided
         if (options.body && typeof options.body === 'object') {
             requestOptions.body = JSON.stringify(options.body);
         }
@@ -138,13 +86,13 @@ class ApiClient {
         try {
             const response = await fetch(url, requestOptions);
             
-            // Handle non-successful responses
+            // handle non-successful responses
             if (!response.ok) {
                 const errorData = await this.handleErrorResponse(response);
                 throw new ApiError(errorData.message, response.status, errorData);
             }
 
-            // Parse response based on content type
+            // parse response based on content type
             const contentType = response.headers.get('content-type');
             if (contentType && contentType.includes('application/json')) {
                 return await response.json();
@@ -156,7 +104,7 @@ class ApiClient {
                 throw error;
             }
             
-            // Network or connection error
+            // network or connection error
             throw new ApiError('Connection error. Please check your internet connection.', 0, {
                 type: 'network_error',
                 originalError: error.message
@@ -164,11 +112,7 @@ class ApiClient {
         }
     }
 
-    /**
-     * Handle error responses from the server
-     * @param {Response} response - Fetch Response object
-     * @returns {Object} Parsed error data
-     */
+    // handle error responses from the server
     async handleErrorResponse(response) {
         try {
             const errorData = await response.json();
@@ -178,7 +122,7 @@ class ApiClient {
                 ...errorData
             };
         } catch {
-            // If JSON parsing fails, use default error message
+            // if json parsing fails, use default error message
             return {
                 message: this.getDefaultErrorMessage(response.status),
                 status: response.status
@@ -186,15 +130,11 @@ class ApiClient {
         }
     }
 
-    /**
-     * Get user-friendly error messages for common HTTP status codes
-     * @param {number} status - HTTP status code
-     * @returns {string} Human-readable error message
-     */
+    // get user-friendly error messages for common http status codes
     getDefaultErrorMessage(status) {
         const errorMessages = {
             400: 'Invalid data. Please check the information entered.',
-            401: 'Incorrect credentials. Please verify your username and password.',
+            401: 'Incorrect credentials. Please verify your email and password.',
             403: 'You do not have permission to perform this action.',
             404: 'Resource not found.',
             409: 'Conflict: User already exists or there are duplicate data.',
@@ -208,13 +148,9 @@ class ApiClient {
         return errorMessages[status] || 'Unknown server error.';
     }
 
-    // ===== AUTHENTICATION METHODS =====
+    // authentication methods
 
-    /**
-     * Authenticate user with credentials
-     * @param {Object} credentials - User credentials (username/email, password)
-     * @returns {Promise<Object>} Authentication response with tokens
-     */
+    // authenticate user with credentials
     async login(credentials) {
         return this.makeRequest('login', {
             method: 'POST',
@@ -222,11 +158,7 @@ class ApiClient {
         });
     }
 
-    /**
-     * Register new user account
-     * @param {Object} userData - User registration data
-     * @returns {Promise<Object>} Registration response
-     */
+    // register new user account
     async register(userData) {
         return this.makeRequest('register', {
             method: 'POST',
@@ -234,10 +166,7 @@ class ApiClient {
         });
     }
 
-    /**
-     * Logout current user (invalidate tokens)
-     * @returns {Promise<Object>} Logout response
-     */
+    // logout current user (invalidate tokens)
     async logout() {
         return this.makeRequest('logout', {
             method: 'POST',
@@ -245,10 +174,7 @@ class ApiClient {
         });
     }
 
-    /**
-     * Refresh authentication token
-     * @returns {Promise<Object>} New token response
-     */
+    // refresh authentication token
     async refreshToken() {
         const refreshToken = localStorage.getItem('refreshToken');
         return this.makeRequest('refresh', {
@@ -257,11 +183,7 @@ class ApiClient {
         });
     }
 
-    /**
-     * Request password reset
-     * @param {string} email - User's email address
-     * @returns {Promise<Object>} Password reset response
-     */
+    // request password reset
     async forgotPassword(email) {
         return this.makeRequest('forgotPassword', {
             method: 'POST',
@@ -269,12 +191,7 @@ class ApiClient {
         });
     }
 
-    /**
-     * Reset password with reset token
-     * @param {string} token - Password reset token
-     * @param {string} newPassword - New password
-     * @returns {Promise<Object>} Password reset confirmation
-     */
+    // reset password with reset token
     async resetPassword(token, newPassword) {
         return this.makeRequest('resetPassword', {
             method: 'POST',
@@ -282,23 +199,16 @@ class ApiClient {
         });
     }
 
-    // ===== USER MANAGEMENT METHODS =====
+    // user management methods
 
-    /**
-     * Get current user's profile information
-     * @returns {Promise<Object>} User profile data
-     */
+    // get current user's profile information
     async getUserProfile() {
         return this.makeRequest('profile', {
             requireAuth: true
         });
     }
 
-    /**
-     * Update user profile information
-     * @param {Object} profileData - Updated profile data
-     * @returns {Promise<Object>} Updated profile response
-     */
+    // update user profile information
     async updateUserProfile(profileData) {
         return this.makeRequest('updateProfile', {
             method: 'PUT',
@@ -308,12 +218,9 @@ class ApiClient {
     }
 }
 
-// ===== CUSTOM ERROR CLASS =====
+// custom error class
 
-/**
- * Custom API Error class for better error handling
- * Provides methods to categorize errors and extract useful information
- */
+// custom api error class for better error handling
 class ApiError extends Error {
     constructor(message, status = 0, data = {}) {
         super(message);
@@ -322,45 +229,33 @@ class ApiError extends Error {
         this.data = data;
     }
 
-    /**
-     * Check if error is a network/connection issue
-     * @returns {boolean} True if network error
-     */
+    // check if error is a network/connection issue
     isNetworkError() {
         return this.status === 0;
     }
 
-    /**
-     * Check if error is related to authentication/authorization
-     * @returns {boolean} True if authentication error
-     */
+    // check if error is related to authentication/authorization
     isAuthError() {
         return this.status === 401 || this.status === 403;
     }
 
-    /**
-     * Check if error is due to invalid input data
-     * @returns {boolean} True if validation error
-     */
+    // check if error is due to invalid input data
     isValidationError() {
         return this.status === 400 || this.status === 422;
     }
 
-    /**
-     * Check if error is a server-side issue
-     * @returns {boolean} True if server error
-     */
+    // check if error is a server-side issue
     isServerError() {
         return this.status >= 500;
     }
 }
 
-// ===== GLOBAL INSTANCE =====
+// global instance
 
-// Create global instance of API client for easy access
+// create global instance of api client for easy access
 window.apiClient = new ApiClient();
 
-// Export for module usage (Node.js compatibility)
+// export for module usage (node.js compatibility)
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { ApiClient, ApiConfig, ApiError };
 }

@@ -1,31 +1,3 @@
-/**
- * V-Mind Login Manager
- * 
- * This file handles all login-related functionality including:
- * - User authentication with the backend API
- * - Form validation and error handling
- * - Smooth animations and user experience enhancements
- * - Integration with registration flow (temp user data)
- * - Password reset functionality
- * - Session management and redirection
- * 
- * Key Features:
- * - Real-time form validation with visual feedback
- * - Smooth entrance animations for form elements
- * - Auto-completion from registration data
- * - Comprehensive error handling and user feedback
- * - Secure password handling and API communication
- * 
- * @author V-Mind Team
- * @version 2.0.0
- */
-
-// ===== LOGIN FUNCTIONALITY =====
-
-/**
- * Main Login Manager Class
- * Handles all aspects of user authentication and login experience
- */
 class LoginManager {
     constructor() {
         // Core form elements
@@ -137,10 +109,6 @@ class LoginManager {
         }
     }
 
-    /**
-     * Handle form submission and authentication
-     * @param {Event} e - Form submit event
-     */
     async handleSubmit(e) {
         e.preventDefault();
         
@@ -150,7 +118,7 @@ class LoginManager {
         const isValid = this.validateAllFields();
         if (!isValid) return;
         
-        // Iniciar proceso de login
+        // Start login process
         this.setLoading(true);
         
         try {
@@ -163,8 +131,8 @@ class LoginManager {
                 this.handleLoginError(result.message);
             }
         } catch (error) {
-            console.error('Error durante el login:', error);
-            this.handleLoginError('Error de conexión. Inténtalo de nuevo.');
+            console.error('Error during login:', error);
+            this.handleLoginError('Error during login. Try again.');
         } finally {
             this.setLoading(false);
         }
@@ -187,35 +155,35 @@ class LoginManager {
         const rules = this.validationRules[fieldName];
         const value = input.value.trim();
         
-        // Limpiar errores previos
+        // Clear previous errors
         this.clearError(fieldName);
         
-        // Validar campo requerido
+        // Validate required field
         if (rules.required && !value) {
-            this.showError(fieldName, 'Este campo es requerido');
+            this.showError(fieldName, 'This field is required');
             return false;
         }
         
-        // Validar longitud mínima
+        // validate minimum length
         if (rules.minLength && value.length < rules.minLength) {
-            this.showError(fieldName, `Debe tener al menos ${rules.minLength} caracteres`);
+            this.showError(fieldName, `Must have at least ${rules.minLength} characters`);
             return false;
         }
         
-        // Validar patrón
+        // Validate pattern
         if (rules.pattern && !rules.pattern.test(value)) {
             if (fieldName === 'username') {
-                this.showError(fieldName, 'Formato de usuario o email inválido');
+                this.showError(fieldName, 'Invalid username or email format');
             }
             return false;
         }
         
-        // Validaciones específicas
+        // Specific validations
         if (fieldName === 'username' && value.includes('@')) {
-            // Validación básica de email
+            // Basic email validation
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailPattern.test(value)) {
-                this.showError(fieldName, 'Formato de email inválido');
+                this.showError(fieldName, 'Invalid email format');
                 return false;
             }
         }
@@ -230,7 +198,7 @@ class LoginManager {
         group.classList.add('error');
         errorElement.textContent = message;
         
-        // Animación de shake
+        // Shake animation
         const input = document.getElementById(fieldName);
         input.style.animation = 'shake 0.5s ease-in-out';
         setTimeout(() => {
@@ -264,7 +232,7 @@ class LoginManager {
 
     async performLogin(formData) {
         try {
-            // Usar la API real del backend
+            // Use the real backend API
             const response = await fetch('http://localhost:3000/api/auth/login', {
                 method: 'POST',
                 headers: {
@@ -291,75 +259,47 @@ class LoginManager {
                         rol: result.data.user.rol
                     },
                     token: result.data.token,
-                    message: 'Login exitoso'
+                    message: 'Login successful'
                 };
             } else {
                 return {
                     success: false,
-                    message: result.message || 'Error en el login'
+                    message: result.message || 'Error during login'
                 };
             }
             
         } catch (error) {
-            console.error('Error durante el login:', error);
+            console.error('Error during login:', error);
             return {
                 success: false,
-                message: 'Error de conexión. Verifica que el backend esté ejecutándose.'
+                message: 'Error during login. Verify that the backend is running.'
             };
         }
     }
 
-    // ===== MÉTODO DE DEMO PARA DESARROLLO =====
-    async performLoginDemo(formData) {
-        // NOTA: Este método se puede usar durante el desarrollo
-        // Eliminar cuando el backend esté listo
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                if (formData.username === 'demo' && formData.password === 'demo123') {
-                    resolve({
-                        success: true,
-                        user: {
-                            id: 1,
-                            username: formData.username,
-                            email: 'demo@vmind.com',
-                            name: 'Usuario Demo'
-                        },
-                        token: 'demo-jwt-token-' + Date.now(),
-                        refreshToken: 'demo-refresh-token'
-                    });
-                } else {
-                    resolve({
-                        success: false,
-                        message: 'Usuario o contraseña incorrectos'
-                    });
-                }
-            }, 1000);
-        });
-    }
-
     handleLoginSuccess(result) {
-        // Guardar token y datos del usuario
+        // save token and user data
         localStorage.setItem('authToken', result.token);
         localStorage.setItem('userData', JSON.stringify(result.user));
         
-        // Guardar refresh token si existe
+        // save refresh token if exists
         if (result.refreshToken) {
             localStorage.setItem('refreshToken', result.refreshToken);
         }
         
-        // Guardar timestamp del login
+        // save login timestamp
         localStorage.setItem('loginTimestamp', Date.now().toString());
         
-        // Mostrar mensaje de éxito personalizado
+        // show success message
         const welcomeMessage = result.user.name ? 
-            `¡Bienvenido de vuelta, ${result.user.name}!` : 
-            '¡Bienvenido de vuelta!';
+            `Welcome back, ${result.user.name}!` : 
+            'Welcome back!';
         
         this.showSuccessMessage(welcomeMessage);
         
-        // Redirigir después de un breve delay
+        // redirect after a brief delay
         setTimeout(() => {
-            // Verificar si hay una URL de redirección guardada
+            // check if there is a saved redirect url
             const redirectUrl = sessionStorage.getItem('redirectAfterLogin') || 'dashboard.html';
             sessionStorage.removeItem('redirectAfterLogin');
             window.location.href = redirectUrl;
@@ -367,30 +307,30 @@ class LoginManager {
     }
 
     handleLoginError(result) {
-        // Manejar diferentes tipos de errores de base de datos
+        // handle different types of database errors
         if (result.errors && Object.keys(result.errors).length > 0) {
-            // Errores de validación específicos por campo
+            // specific validation errors by field
             this.handleValidationErrors(result.errors);
         } else {
-            // Error general
+            // general error
             this.showGlobalError(result.message);
         }
         
-        // Manejar errores específicos por código de estado
+        // handle specific errors by status code
         if (result.status) {
             this.handleStatusSpecificErrors(result.status);
         }
         
-        // Limpiar campos sensibles
+        // clear sensitive fields
         this.passwordInput.value = '';
         this.passwordInput.focus();
     }
 
     handleValidationErrors(errors) {
-        // Limpiar errores previos
+        // clear previous errors
         this.clearAllErrors();
         
-        // Mostrar errores específicos por campo
+        // show specific errors by field
         for (const [field, messages] of Object.entries(errors)) {
             const message = Array.isArray(messages) ? messages[0] : messages;
             
@@ -432,15 +372,15 @@ class LoginManager {
 
     showAccountLockedMessage() {
         this.showGlobalError(
-            'Tu cuenta ha sido bloqueada por múltiples intentos fallidos. ' +
-            'Intenta de nuevo más tarde o contacta al soporte.',
+            'Your account has been blocked due to multiple failed attempts. ' +
+            'Try again later or contact support.',
             8000
         );
     }
 
     showAccountSuspendedMessage() {
         this.showGlobalError(
-            'Tu cuenta ha sido suspendida. Contacta al soporte para más información.',
+            'Your account has been suspended. Contact support for more information.',
             10000
         );
     }
@@ -518,23 +458,23 @@ class LoginManager {
         
         setTimeout(() => {
             infoDiv.remove();
-        }, 5000); // Mensaje de información dura más tiempo
+        }, 5000); // information message lasts longer
     }
 
     redirectToRegister() {
-        // Implementar redirección a página de registro
-        console.log('Redirigir a registro');
+        // implement redirect to registration page
+        console.log('Redirect to registration page');
         window.location.href = 'register.html';
     }
 
     handleForgotPassword() {
-        // Implementar funcionalidad de recuperación de contraseña
-        console.log('Recuperar contraseña');
+        // implement forgot password functionality
+        console.log('Recover password');
         // window.location.href = 'forgot-password.html';
     }
 }
 
-// ===== ANIMACIONES ADICIONALES =====
+// ===== ADDITIONAL ANIMATIONS =====
 const style = document.createElement('style');
 style.textContent = `
     @keyframes shake {
@@ -556,19 +496,19 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// ===== INICIALIZACIÓN =====
+// ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', () => {
     new LoginManager();
 });
 
-// ===== UTILIDADES ADICIONALES =====
+// ===== ADDITIONAL UTILITIES =====
 function checkAuthStatus() {
     const token = localStorage.getItem('authToken');
     if (token) {
-        // Usuario ya autenticado, redirigir
+        // user already authenticated, redirect
         window.location.href = 'dashboard.html';
     }
 }
 
-// Verificar si el usuario ya está autenticado
+// check if the user is already authenticated
 checkAuthStatus();

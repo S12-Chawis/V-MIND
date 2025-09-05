@@ -16,7 +16,6 @@ const register = async (req, res) => {
   try {
     const { user_name, email, phone, passwords, objective, preferred_language } = req.body;
     
-    // Validate required fields
     if (!user_name || !email || !passwords) {
       return res.status(400).json({ 
         success: false, 
@@ -24,10 +23,8 @@ const register = async (req, res) => {
       });
     }
     
-    // Hash password
     const hashedPassword = await bcrypt.hash(passwords, 10);
     
-    // Prepare user data for database
     const userData = {
       user_name,
       email,
@@ -39,13 +36,9 @@ const register = async (req, res) => {
       rol: 'user'
     };
     
-    // Create user in database
     const newUser = await User.create(userData);
-    
-    // Generate JWT token
     const token = generateToken(newUser.user_id);
     
-    // Return success response
     res.status(201).json({
       success: true,
       message: 'User registered successfully',
@@ -73,7 +66,6 @@ const login = async (req, res) => {
   try {
     const { email, passwords } = req.body;
 
-    // Validate required fields
     if (!email || !passwords) {
       return res.status(400).json({
         success: false,
@@ -81,7 +73,6 @@ const login = async (req, res) => {
       });
     }
 
-    // Find user by email
     const user = await User.findByEmail(email);
     if (!user) {
       return res.status(401).json({
@@ -90,7 +81,6 @@ const login = async (req, res) => {
       });
     }
 
-    // Check password
     const isValidPassword = await User.comparePassword(passwords, user.passwords);
     if (!isValidPassword) {
       return res.status(401).json({
@@ -99,10 +89,7 @@ const login = async (req, res) => {
       });
     }
 
-    // Update last connection
     await User.updateLastConnection(user.user_id);
-
-    // Generate token
     const token = generateToken(user.user_id);
 
     res.json({
@@ -115,7 +102,7 @@ const login = async (req, res) => {
           email: user.email,
           rol: user.rol,
           current_level: user.current_level,
-          objetive: user.objetive
+          objective: user.objective
         },
         token
       }
@@ -151,7 +138,7 @@ const getProfile = async (req, res) => {
           email: user.email,
           phone: user.phone,
           rol: user.rol,
-          objetive: user.objetive,
+          objective: user.objective,
           current_level: user.current_level,
           preferred_language: user.preferred_language,
           creation_date: user.creation_date,
@@ -172,14 +159,17 @@ const getProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
-    const { user_name, phone, objetive, preferred_language } = req.body;
+    // Extract user data from request body -> frontend sends data to backend via POST request
+    const { user_name, phone, objective, preferred_language } = req.body;
     
+    // Build update object with only provided fields -> prevents updating with undefined values
     const updateData = {};
     if (user_name) updateData.user_name = user_name;
     if (phone) updateData.phone = phone;
-    if (objetive) updateData.objetive = objetive;
+    if (objective) updateData.objective = objective;
     if (preferred_language) updateData.preferred_language = preferred_language;
 
+    // Check if there are any fields to update -> Object.keys().length counts object properties
     if (Object.keys(updateData).length === 0) {
       return res.status(400).json({
         success: false,
@@ -187,17 +177,21 @@ const updateProfile = async (req, res) => {
       });
     }
 
+    // Build dynamic SQL query -> only updates fields that were provided
     const query = `
       UPDATE users 
       SET ${Object.keys(updateData).map(key => `${key} = ?`).join(', ')}
       WHERE user_id = ?
     `;
     
+    // Create values array for SQL query -> spread operator flattens array for proper SQL execution
     const values = [...Object.values(updateData), req.user.user_id];
     
+    // Execute database update query
     const { pool } = require('../config/database');
     const [result] = await pool.execute(query, values);
 
+    // Check if any rows were affected -> 0 means user not found or no changes made
     if (result.affectedRows === 0) {
       return res.status(404).json({
         success: false,
@@ -205,6 +199,7 @@ const updateProfile = async (req, res) => {
       });
     }
 
+    // Return success response with updated data
     res.json({
       success: true,
       message: 'Profile updated successfully',

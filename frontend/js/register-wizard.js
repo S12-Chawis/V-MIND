@@ -1,5 +1,3 @@
-// Registration wizard system
-
 class RegisterWizard {
     constructor() {
         this.currentStep = 1;
@@ -294,7 +292,7 @@ class RegisterWizard {
 
                 // Redirect to survey, not login
                 setTimeout(() => {
-                    window.location.href = 'login.html';
+                    window.location.href = 'dashboard.html';
                 }, 2000);
             } else {
                 throw new Error(result.message || 'Registration failed');

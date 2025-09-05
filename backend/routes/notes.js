@@ -8,19 +8,19 @@ const {
 } = require('../controllers/noteController');
 const { auth } = require('../middleware/auth');
 
-// Todas las rutas requieren autenticación
+// all routes require authentication
 router.use(auth);
 
-// Obtener todas las notas del usuario
+// get all notes of the user
 router.get('/user', getUserNotes);
 
-// Crear una nueva nota
+// create a new note
 router.post('/', createNote);
 
-// Actualizar una nota existente
+// update a note
 router.put('/:noteId', updateNote);
 
-// Eliminar una nota
+// delete a note
 router.delete('/:noteId', deleteNote);
 
 module.exports = router;
