@@ -2,6 +2,9 @@
 
 A gamified learning platform that personalizes your learning journey through interactive roadmaps, progress tracking, and AI-powered recommendations.
 
+<img width="1919" height="965" alt="image" src="https://github.com/user-attachments/assets/2841cb61-d51a-43dc-a544-a4e69246e632" />
+
+
 ## ✨ Features
 
 - **Personalized Learning Paths**: Dynamic roadmaps based on your experience level and interests
