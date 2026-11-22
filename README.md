@@ -2,7 +2,13 @@
 
 A gamified learning platform that personalizes your learning journey through interactive roadmaps, progress tracking, and AI-powered recommendations.
 
+<img width="1919" height="969" alt="image" src="https://github.com/user-attachments/assets/0af47025-5ef0-46ad-9932-d60ec0f319e2" />
+<img width="1919" height="970" alt="image" src="https://github.com/user-attachments/assets/b6627dbb-1db6-4ba3-9d2e-dd172234654f" />
 <img width="1919" height="965" alt="image" src="https://github.com/user-attachments/assets/2841cb61-d51a-43dc-a544-a4e69246e632" />
+<img width="1919" height="972" alt="image" src="https://github.com/user-attachments/assets/c4d75c28-8807-4e25-819b-eb89edd6c924" />
+<img width="1917" height="982" alt="image" src="https://github.com/user-attachments/assets/9b3a9e6a-41c8-42f2-a09a-3b162c6d9364" />
+<img width="1919" height="963" alt="image" src="https://github.com/user-attachments/assets/a247779f-75f0-4155-b55d-216fae31f042" />
+
 
 
 ## ✨ Features
