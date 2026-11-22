@@ -8,6 +8,7 @@ A gamified learning platform that personalizes your learning journey through int
 <img width="1919" height="972" alt="image" src="https://github.com/user-attachments/assets/c4d75c28-8807-4e25-819b-eb89edd6c924" />
 <img width="1917" height="982" alt="image" src="https://github.com/user-attachments/assets/9b3a9e6a-41c8-42f2-a09a-3b162c6d9364" />
 <img width="1919" height="963" alt="image" src="https://github.com/user-attachments/assets/a247779f-75f0-4155-b55d-216fae31f042" />
+<img width="1919" height="970" alt="image" src="https://github.com/user-attachments/assets/c1a7c594-fd0c-457e-99df-4e9da29a4b83" />
 
 
 
